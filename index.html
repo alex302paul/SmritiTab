@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Startdock</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="workspace">
+    <header><span class="eyebrow">YOUR WORKSPACE</span><h1>Startdock</h1>
+      <p>Organize your subscriptions in one focused place.</p></header>
+    <form id="entry-form" class="composer">
+      <label for="title">New Subscription</label>
+      <div class="form-row"><input id="title" name="title" required maxlength="120" placeholder="Enter a title...">
+        <select id="category" name="category"><option>Infrastructure</option><option>Design</option><option>Analytics</option><option>Productivity</option></select>
+        <button type="submit">Add item</button></div>
+    </form>
+    <label for="search">Search records</label>
+    <input id="search" type="search" placeholder="Filter by title...">
+    <p id="summary" aria-live="polite"></p>
+    <ul id="items" class="items"></ul>
+  </main>
+</body>
+</html>
