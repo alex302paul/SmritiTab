@@ -1,0 +1,14 @@
+:root { font-family: system-ui, sans-serif; color-scheme: dark; background: #0b0d12; color: #e9eef4; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; padding: 3rem 1rem; }
+.workspace { width: min(100%, 760px); margin: 0 auto; }
+.eyebrow { color: #34d399; font-size: .72rem; letter-spacing: .18em; font-weight: 700; }
+h1 { margin: .7rem 0 .3rem; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -.05em; }
+p { color: #9da6b3; } label { display: block; margin: 1rem 0 .5rem; font-size: .82rem; color: #bec6d0; }
+.composer { margin: 2.5rem 0 1.2rem; } .form-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+input, select, button { padding: .85rem 1rem; border: 1px solid #2a313a; border-radius: .6rem; font: inherit; }
+input, select { background: #151a22; color: white; } .form-row input { flex: 1 1 200px; }
+button { background: #19bf82; color: #06100c; font-weight: 650; cursor: pointer; border: none; }
+button:hover { background: #55e3ae; } #search { width: 100%; }
+.items { list-style: none; padding: 0; } .items li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid #29303b; padding: 1rem .2rem; }
+.items small { color: #9da6b3; } .items button { background: transparent; color: #fca5a5; padding: .4rem .7rem; }
