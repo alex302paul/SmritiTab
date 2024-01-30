@@ -12,3 +12,4 @@ button { background: #19bf82; color: #06100c; font-weight: 650; cursor: pointer;
 button:hover { background: #55e3ae; } #search { width: 100%; }
 .items { list-style: none; padding: 0; } .items li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid #29303b; padding: 1.25rem .2rem; }
 .items small { color: #9da6b3; } .items button { background: transparent; color: #fca5a5; padding: .4rem .7rem; }
+.card { border-radius: 12px; }
