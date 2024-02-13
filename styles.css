@@ -20,3 +20,5 @@ button:hover { background: #55e3ae; } #search { width: 100%; }
 .card { border-radius: 12px; }
 .card { border-radius: 12px; }
 .card { border-radius: 12px; }
+/* spacing tweak */
+.container { padding-inline: 1rem; }
