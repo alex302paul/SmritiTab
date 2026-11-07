@@ -16,7 +16,8 @@
     "history",
     "clipboardRead",
     "clipboardWrite",
-    "contextMenus"
+    "contextMenus",
+    "tabGroups"
   ],
   "host_permissions": [
     "https://api.open-meteo.com/*",
