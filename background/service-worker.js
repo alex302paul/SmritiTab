@@ -15,19 +15,47 @@ const PENDING_SEARCH_KEY = `${NAMESPACE}:pending-search`;
 const PENDING_ACTION_KEY = `${NAMESPACE}:pending-action`;
 const MENU_ID = "smrititab-search-selection";
 
-/** Creates (or refreshes) the context menu entry. */
+let menuRegistration;
+
+/**
+ * Refresh the context menu once per install/startup event.
+ * Context menus survive service-worker suspension, so registration on every
+ * worker evaluation is unnecessary. Coalesce overlapping lifecycle events.
+ */
 function registerContextMenu() {
-  try {
-    chrome.contextMenus.removeAll(() => {
-      chrome.contextMenus.create({
-        id: MENU_ID,
-        title: 'Search SmritiTab for "%s"',
-        contexts: ["selection"],
+  if (menuRegistration) return menuRegistration;
+
+  menuRegistration = (async () => {
+    try {
+      await new Promise((resolve, reject) => {
+        chrome.contextMenus.removeAll(() => {
+          const error = chrome.runtime.lastError;
+          if (error) reject(new Error(error.message));
+          else resolve();
+        });
       });
-    });
-  } catch (error) {
-    console.warn("[SmritiTab] Could not register the context menu.", error);
-  }
+
+      chrome.contextMenus.create(
+        {
+          id: MENU_ID,
+          title: 'Search SmritiTab for "%s"',
+          contexts: ["selection"],
+        },
+        () => {
+          const error = chrome.runtime.lastError;
+          if (error) {
+            console.warn("[SmritiTab] Could not create the context menu.", error.message);
+          }
+        },
+      );
+    } catch (error) {
+      console.warn("[SmritiTab] Could not register the context menu.", error);
+    } finally {
+      menuRegistration = undefined;
+    }
+  })();
+
+  return menuRegistration;
 }
 
 function openDashboard() {
@@ -36,20 +64,18 @@ function openDashboard() {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
-  registerContextMenu();
+  void registerContextMenu();
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  registerContextMenu();
+  void registerContextMenu();
 });
-
-// The worker can be revived at any time, so make sure the menu exists.
-registerContextMenu();
 
 chrome.contextMenus.onClicked.addListener((data) => {
   if (data.menuItemId !== MENU_ID) return;
   const selection = (data.selectionText || "").trim();
   if (!selection) return;
+
   chrome.storage.local
     .set({ [PENDING_SEARCH_KEY]: selection })
     .then(() => openDashboard())
@@ -63,13 +89,18 @@ chrome.commands.onCommand.addListener((command) => {
     chrome.storage.local
       .set({ [PENDING_ACTION_KEY]: "focus-search" })
       .then(() => openDashboard())
-      .catch(() => undefined);
+      .catch((error) => {
+        console.warn("[SmritiTab] Could not open search.", error);
+      });
     return;
   }
+
   if (command === "toggle-focus-mode") {
     chrome.storage.local
       .set({ [PENDING_ACTION_KEY]: "toggle-focus" })
       .then(() => openDashboard())
-      .catch(() => undefined);
+      .catch((error) => {
+        console.warn("[SmritiTab] Could not toggle focus mode.", error);
+      });
   }
 });
