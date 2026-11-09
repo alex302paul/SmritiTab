@@ -1,149 +1,134 @@
-/* =========================================================
-   SmritiTab — Widgets Redesign v3
-   Match extension glass · Clock hero · Compact side cards
-   ========================================================= */
-
-/* 1. Row — top gap + asymmetric columns */
+/* SmritiTab widget strip — stable widget classes, no position-dependent selectors */
 .smriti-widget-row {
   display: grid !important;
-  grid-template-columns: 0.78fr 2fr 0.78fr !important;
-  gap: 12px !important;
+  grid-template-columns: minmax(0, .78fr) minmax(0, 2fr) minmax(0, .78fr) !important;
   align-items: stretch !important;
+  gap: 12px !important;
+  width: 100% !important;
   max-width: 68rem !important;
-  margin: 1.15rem auto 1.35rem !important; /* upar se gap */
+  margin: 1.15rem auto 1.35rem !important;
   padding: 0 1.25rem !important;
+  min-width: 0 !important;
 }
 
-/* 2. Same glass language as rest of extension
-   (transparent, thin border, rounded-2xl feel) */
 .smriti-widget-row > section {
   position: relative !important;
   min-width: 0 !important;
-  border-radius: 16px !important; /* rounded-2xl */
-  background: rgba(15, 23, 42, 0.12) !important; /* bahut light transparent */
+  border: 1px solid rgba(148, 163, 184, .22) !important;
+  border-radius: 16px !important;
+  background: rgba(15, 23, 42, .12) !important;
   backdrop-filter: blur(12px) saturate(1.1) !important;
   -webkit-backdrop-filter: blur(12px) saturate(1.1) !important;
-  border: 1px solid rgba(148, 163, 184, 0.22) !important;
-  box-shadow: none !important; /* heavy shadow hatao */
-  transition: border-color 0.18s ease, background 0.18s ease !important;
+  box-shadow: none !important;
+  transition: border-color .18s ease, background .18s ease !important;
 }
 
 .smriti-widget-row > section:hover {
-  background: rgba(15, 23, 42, 0.28) !important;
-  border-color: rgba(249, 115, 22, 0.28) !important;
+  background: rgba(15, 23, 42, .22) !important;
+  border-color: rgba(249, 115, 22, .3) !important;
 }
 
-/* 3. CLOCK — Hero (thoda stronger glass, zyada height allow) */
-.smriti-widget-row > section:nth-child(2),
-.smriti-clock-widget {
-  background: rgba(15, 23, 42, 0.26) !important;
-  border-color: rgba(148, 163, 184, 0.28) !important;
-  padding: 0.95rem 1.25rem 1.05rem !important;
-  min-height: 0 !important;
+.smriti-weather-widget,
+.smriti-quote-widget {
+  min-height: 118px !important;
+  max-height: 132px !important;
   height: auto !important;
-}
-
-/* Big time */
-.smriti-clock-time {
-  font-size: clamp(2.4rem, 4.4vw, 3.6rem) !important;
-  font-weight: 650 !important;
-  letter-spacing: -0.07em !important;
-  line-height: 0.92 !important;
-  color: #ffffff !important;
-  font-variant-numeric: tabular-nums;
-}
-
-/* AM / PM — Orange */
-.smriti-widget-row > section:nth-child(2) span.text-xs,
-.smriti-widget-row > section:nth-child(2) span.text-sm,
-.smriti-widget-row > section:nth-child(2) span[class*="orange"],
-.smriti-widget-row > section:nth-child(2) .text-orange-600,
-.smriti-widget-row > section:nth-child(2) .text-orange-300 {
-  color: #f97316 !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.04em !important;
-  font-size: 0.88rem !important;
-  margin-left: 0.28rem;
-  position: relative;
-  top: -0.1em;
-}
-
-/* Date + greeting tighter */
-.smriti-widget-row > section:nth-child(2) .text-\[10px\],
-.smriti-widget-row > section:nth-child(2) .text-xs,
-.smriti-widget-row > section:nth-child(2) .text-slate-500,
-.smriti-widget-row > section:nth-child(2) .text-slate-400 {
-  margin-top: 0.3rem !important;
-  font-size: 0.76rem !important;
-  color: rgba(148, 163, 184, 0.9) !important;
-}
-
-/* 4. WEATHER + QUOTE — Compact height, less empty space */
-.smriti-widget-row > section:nth-child(1),
-.smriti-widget-row > section:nth-child(3) {
-  padding: 0.55rem 0.85rem 0.6rem !important;
-  min-height: 0 !important;
-  height: auto !important;
+  padding: .6rem .85rem !important;
   justify-content: center !important;
 }
 
-/* Force smaller height on side cards */
-.smriti-widget-row > section:nth-child(1),
-.smriti-widget-row > section:nth-child(3) {
-  max-height: 118px !important; /* ← height control */
-}
-
-/* Kill old forced min-height on clock from original CSS */
 .smriti-clock-widget {
-  min-height: 0 !important;
+  min-height: 156px !important;
+  height: auto !important;
+  padding: .95rem 1.25rem 1.05rem !important;
+  border-color: rgba(249, 115, 22, .3) !important;
+  background: linear-gradient(135deg, rgba(15, 23, 42, .3), rgba(15, 23, 42, .16)) !important;
+  box-shadow: 0 12px 36px -18px rgba(234, 88, 12, .35) !important;
+  z-index: 1;
 }
 
-/* Header labels smaller */
+.smriti-clock-time {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem) !important;
+  font-weight: 650 !important;
+  letter-spacing: -.07em !important;
+  line-height: .95 !important;
+  color: #fff !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.smriti-clock-widget header,
+.smriti-weather-widget header,
+.smriti-quote-widget header {
+  margin-bottom: .35rem !important;
+}
+
 .smriti-widget-row > section header,
 .smriti-widget-row > section header span {
-  font-size: 0.58rem !important;
-  letter-spacing: 0.12em !important;
+  font-size: .58rem !important;
+  letter-spacing: .12em !important;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.65) !important;
+  color: rgba(148, 163, 184, .72) !important;
   font-weight: 600;
-  margin-bottom: 0.15rem !important;
 }
 
-/* Tighten content gaps inside side cards */
-.smriti-widget-row > section:nth-child(1) > *,
-.smriti-widget-row > section:nth-child(3) > * {
-  margin-top: 0 !important;
-  margin-bottom: 0.15rem !important;
-}
-.smriti-widget-row > section:nth-child(1) > *:last-child,
-.smriti-widget-row > section:nth-child(3) > *:last-child {
-  margin-bottom: 0 !important;
+.smriti-clock-widget .text-orange-600,
+.smriti-clock-widget .text-orange-300 {
+  color: #f97316 !important;
+  font-weight: 700 !important;
 }
 
-/* 5. Light responsive */
+.smriti-clock-widget > div:last-child {
+  min-width: 0;
+}
+
+.smriti-weather-widget > div:last-child,
+.smriti-quote-widget > div:last-child {
+  min-width: 0;
+}
+
 @media (max-width: 900px) {
   .smriti-widget-row {
-    grid-template-columns: 0.85fr 1.7fr 0.85fr !important;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.7fr) minmax(0, .85fr) !important;
     gap: 10px !important;
   }
   .smriti-clock-time {
     font-size: clamp(2rem, 4.5vw, 2.9rem) !important;
   }
-  .smriti-widget-row > section:nth-child(1),
-  .smriti-widget-row > section:nth-child(3) {
-    max-height: 110px !important;
-  }
 }
 
 @media (max-width: 640px) {
   .smriti-widget-row {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(112px, .9fr) minmax(176px, 1.5fr) minmax(112px, .9fr) !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    padding: 0 1rem .35rem !important;
+    scroll-snap-type: x proximity;
   }
-  .smriti-widget-row > section:nth-child(2) {
-    order: -1;
+  .smriti-widget-row > section {
+    scroll-snap-align: start;
   }
-  .smriti-widget-row > section:nth-child(1),
-  .smriti-widget-row > section:nth-child(3) {
-    max-height: none !important;
+  .smriti-weather-widget,
+  .smriti-quote-widget {
+    min-height: 116px !important;
+    max-height: 126px !important;
+    padding: .55rem .65rem !important;
+  }
+  .smriti-clock-widget {
+    min-height: 142px !important;
+    padding: .8rem .75rem !important;
+  }
+  .smriti-clock-time {
+    font-size: clamp(1.8rem, 7vw, 2.45rem) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smriti-widget-row > section {
+    transition: none !important;
   }
 }
