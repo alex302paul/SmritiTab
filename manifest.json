@@ -17,7 +17,8 @@
     "clipboardRead",
     "clipboardWrite",
     "contextMenus",
-    "tabGroups"
+    "tabGroups",
+    "tabs"
   ],
   "host_permissions": [
     "https://api.open-meteo.com/*",
