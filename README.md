@@ -43,9 +43,21 @@ SmritiTab/
 - Keep permissions minimal; remove a permission only after confirming the dashboard no longer uses its corresponding Chrome API.
 - Never commit secrets, API keys, or personal tokens.
 
-## Permissions
+## Permissions and privacy
 
-The manifest currently declares storage, bookmarks, history, clipboard, and context-menu permissions. These are retained temporarily because the bundled dashboard may still use those APIs. They must be audited against recovered source before removal.
+SmritiTab requests the following Chrome permissions for specific dashboard features:
+
+- `storage`: persist dashboard settings, notes, tasks, widgets, and cached data.
+- `bookmarks`: read and manage bookmark folders and links.
+- `history`: provide the browsing-history view.
+- `tabs`: read the active page title and URL for **Save current tab**, and open dashboard tabs.
+- `tabGroups`: open selected bookmark collections in a tab group.
+- `contextMenus`: provide the selection-to-search context-menu action.
+- `clipboardRead` / `clipboardWrite`: power the clipboard manager and copy/paste actions.
+
+The weather widget first uses a previously selected city. If no city has been saved, it may request browser location access to obtain coordinates for a local forecast. If location access is denied or unavailable, choose a city from **Weather details** instead; SmritiTab should not silently substitute a different city based on the browser timezone.
+
+Location is used to request weather coordinates from Open-Meteo. Review the browser's extension site permissions if you want to revoke location access. No location permission is requested until the weather widget needs it.
 
 ## License
 
