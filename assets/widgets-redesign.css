@@ -1,0 +1,149 @@
+/* =========================================================
+   SmritiTab — Widgets Redesign v3
+   Match extension glass · Clock hero · Compact side cards
+   ========================================================= */
+
+/* 1. Row — top gap + asymmetric columns */
+.smriti-widget-row {
+  display: grid !important;
+  grid-template-columns: 0.78fr 2fr 0.78fr !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+  max-width: 68rem !important;
+  margin: 1.15rem auto 1.35rem !important; /* upar se gap */
+  padding: 0 1.25rem !important;
+}
+
+/* 2. Same glass language as rest of extension
+   (transparent, thin border, rounded-2xl feel) */
+.smriti-widget-row > section {
+  position: relative !important;
+  min-width: 0 !important;
+  border-radius: 16px !important; /* rounded-2xl */
+  background: rgba(15, 23, 42, 0.18) !important; /* bahut light transparent */
+  backdrop-filter: blur(12px) saturate(1.1) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.1) !important;
+  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+  box-shadow: none !important; /* heavy shadow hatao */
+  transition: border-color 0.18s ease, background 0.18s ease !important;
+}
+
+.smriti-widget-row > section:hover {
+  background: rgba(15, 23, 42, 0.28) !important;
+  border-color: rgba(249, 115, 22, 0.28) !important;
+}
+
+/* 3. CLOCK — Hero (thoda stronger glass, zyada height allow) */
+.smriti-widget-row > section:nth-child(2),
+.smriti-clock-widget {
+  background: rgba(15, 23, 42, 0.26) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  padding: 0.95rem 1.25rem 1.05rem !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* Big time */
+.smriti-clock-time {
+  font-size: clamp(2.4rem, 4.4vw, 3.6rem) !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.07em !important;
+  line-height: 0.92 !important;
+  color: #ffffff !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* AM / PM — Orange */
+.smriti-widget-row > section:nth-child(2) span.text-xs,
+.smriti-widget-row > section:nth-child(2) span.text-sm,
+.smriti-widget-row > section:nth-child(2) span[class*="orange"],
+.smriti-widget-row > section:nth-child(2) .text-orange-600,
+.smriti-widget-row > section:nth-child(2) .text-orange-300 {
+  color: #f97316 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  font-size: 0.88rem !important;
+  margin-left: 0.28rem;
+  position: relative;
+  top: -0.1em;
+}
+
+/* Date + greeting tighter */
+.smriti-widget-row > section:nth-child(2) .text-\[10px\],
+.smriti-widget-row > section:nth-child(2) .text-xs,
+.smriti-widget-row > section:nth-child(2) .text-slate-500,
+.smriti-widget-row > section:nth-child(2) .text-slate-400 {
+  margin-top: 0.3rem !important;
+  font-size: 0.76rem !important;
+  color: rgba(148, 163, 184, 0.9) !important;
+}
+
+/* 4. WEATHER + QUOTE — Compact height, less empty space */
+.smriti-widget-row > section:nth-child(1),
+.smriti-widget-row > section:nth-child(3) {
+  padding: 0.55rem 0.85rem 0.6rem !important;
+  min-height: 0 !important;
+  height: auto !important;
+  justify-content: center !important;
+}
+
+/* Force smaller height on side cards */
+.smriti-widget-row > section:nth-child(1),
+.smriti-widget-row > section:nth-child(3) {
+  max-height: 118px !important; /* ← height control */
+}
+
+/* Kill old forced min-height on clock from original CSS */
+.smriti-clock-widget {
+  min-height: 0 !important;
+}
+
+/* Header labels smaller */
+.smriti-widget-row > section header,
+.smriti-widget-row > section header span {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.65) !important;
+  font-weight: 600;
+  margin-bottom: 0.15rem !important;
+}
+
+/* Tighten content gaps inside side cards */
+.smriti-widget-row > section:nth-child(1) > *,
+.smriti-widget-row > section:nth-child(3) > * {
+  margin-top: 0 !important;
+  margin-bottom: 0.15rem !important;
+}
+.smriti-widget-row > section:nth-child(1) > *:last-child,
+.smriti-widget-row > section:nth-child(3) > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 5. Light responsive */
+@media (max-width: 900px) {
+  .smriti-widget-row {
+    grid-template-columns: 0.85fr 1.7fr 0.85fr !important;
+    gap: 10px !important;
+  }
+  .smriti-clock-time {
+    font-size: clamp(2rem, 4.5vw, 2.9rem) !important;
+  }
+  .smriti-widget-row > section:nth-child(1),
+  .smriti-widget-row > section:nth-child(3) {
+    max-height: 110px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .smriti-widget-row {
+    grid-template-columns: 1fr !important;
+  }
+  .smriti-widget-row > section:nth-child(2) {
+    order: -1;
+  }
+  .smriti-widget-row > section:nth-child(1),
+  .smriti-widget-row > section:nth-child(3) {
+    max-height: none !important;
+  }
+}
