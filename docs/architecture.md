@@ -8,6 +8,7 @@
 - `assets/dashboard.bundle.js`: committed dashboard application runtime.
 - `assets/dashboard.bundle.css`: dashboard stylesheet.
 - `assets/widgets-redesign.css`: widget-row presentation overrides.
+- `assets/accessibility.css`: keyboard-focus and forced-colors refinements, loaded after dashboard styles.
 
 The existing extension and its committed assets are the runtime source of truth. A separate React/Vite source reconstruction is not a prerequisite for maintenance or feature work.
 
@@ -24,6 +25,7 @@ The root `manifest.json` and `index.html` are the extension entry points. Run `n
 - `npm run verify` checks the repository package.
 - `npm run build` creates and verifies the package.
 - `npm run verify:dist` checks the generated package.
+- `npm test` runs the Node.js regression suite.
 
 This is a packaging workflow, not a React/Vite compilation pipeline.
 
@@ -35,4 +37,4 @@ This is a packaging workflow, not a React/Vite compilation pipeline.
 - Do not remove a permission until runtime usage has been checked.
 - Keep the current production assets loadable until changes pass static checks and live Chrome verification.
 
-See [Phase 2 runtime audit](runtime-audit.md) for the feature inventory, permission map, persistence keys and manual verification matrix. See [build workflow](build.md) for packaging commands.
+See [Phase 2 runtime audit](runtime-audit.md) for the feature inventory, permission map, persistence keys and manual verification matrix. See [build workflow](build.md) for packaging commands and [release readiness](release-readiness.md) for the final QA gate.
