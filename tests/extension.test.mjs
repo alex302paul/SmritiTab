@@ -165,6 +165,16 @@ describe("extension compatibility contracts", () => {
     assert.match(css, /animation-duration/);
     assert.match(css, /transition-duration/);
   });
+
+  it("keeps the weather, clock and quote widgets in a scrollable single row on mobile", () => {
+    const css = fs.readFileSync(path.join(projectRoot, "assets", "widgets-redesign.css"), "utf8");
+    assert.match(css, /grid-template-columns:\s*minmax\(112px/);
+    assert.match(css, /overflow-x:\s*auto/);
+    assert.match(css, /scroll-snap-type:\s*x proximity/);
+    assert.match(css, /-webkit-overflow-scrolling:\s*touch/);
+    assert.match(css, /max-width:\s*380px/);
+    assert.match(css, /scrollbar-color:\s*rgba\(249, 115, 22/);
+  });
 });
 
 describe("extension verifier", () => {
