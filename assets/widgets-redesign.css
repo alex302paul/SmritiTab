@@ -105,25 +105,54 @@
     gap: 8px !important;
     overflow-x: auto !important;
     overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
-    padding: 0 1rem .35rem !important;
+    scrollbar-color: rgba(249, 115, 22, .65) transparent;
+    padding: 0 1rem .4rem !important;
+    scroll-padding-inline: 1rem;
     scroll-snap-type: x proximity;
   }
+
+  .smriti-widget-row::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .smriti-widget-row::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(249, 115, 22, .65);
+  }
+
   .smriti-widget-row > section {
     scroll-snap-align: start;
   }
+
   .smriti-weather-widget,
   .smriti-quote-widget {
     min-height: 116px !important;
     max-height: 126px !important;
     padding: .55rem .65rem !important;
   }
+
   .smriti-clock-widget {
     min-height: 142px !important;
     padding: .8rem .75rem !important;
   }
+
   .smriti-clock-time {
     font-size: clamp(1.8rem, 7vw, 2.45rem) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .smriti-widget-row {
+    grid-template-columns: minmax(104px, .9fr) minmax(160px, 1.4fr) minmax(104px, .9fr) !important;
+    gap: 7px !important;
+    padding-inline: .75rem !important;
+    scroll-padding-inline: .75rem;
+  }
+
+  .smriti-clock-time {
+    font-size: clamp(1.65rem, 7vw, 2.1rem) !important;
   }
 }
 
