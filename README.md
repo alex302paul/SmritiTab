@@ -6,7 +6,7 @@ SmritiTab is a Manifest V3 Chrome extension that replaces Chrome's New Tab page 
 
 The existing committed dashboard bundle is the production runtime and compatibility baseline. SmritiTab is maintained as an existing extension; recovering or migrating a separate React/Vite source project is not a prerequisite for improving it.
 
-The repository includes a dependency-free Node.js workflow to verify and package the current extension. It copies production assets unchanged. See [Phase 2 runtime audit](docs/runtime-audit.md) for the feature inventory, permissions, persistence keys and manual verification checklist.
+The repository includes a dependency-free Node.js workflow to verify and package the current extension. It copies production assets unchanged. See [automated testing](docs/testing.md) and [Phase 2 runtime audit](docs/runtime-audit.md) for the feature inventory, permissions, persistence keys and manual verification checklist.
 
 ## Install locally
 
@@ -33,6 +33,7 @@ SmritiTab/
 │   ├── architecture.md
 │   ├── build.md
 │   ├── runtime-audit.md         # Phase 2 feature and compatibility audit
+│   ├── testing.md               # Automated regression tests and CI
 │   └── runtime-baseline.md   # Runtime baseline and compatibility notes
 ├── index.html                  # New Tab entry point
 ├── manifest.json               # Chrome extension manifest
@@ -45,6 +46,7 @@ Requires Node.js 20 or newer. The packaging workflow has no third-party npm depe
 
 ```sh
 npm ci
+npm test
 npm run verify
 npm run build
 npm run verify:dist
