@@ -53,11 +53,7 @@ function resolveExtensionPath(value, sourceFile) {
   }
 
   const clean = value.split(/[?#]/, 1)[0];
-  const resolved = path.posix.normalize(
-    path.posix.join(path.posix.dirname(sourceFile), clean),
-  );
-
-  return resolved;
+  return path.posix.normalize(path.posix.join(path.posix.dirname(sourceFile), clean));
 }
 
 const requiredRuntimeFiles = [
@@ -67,6 +63,7 @@ const requiredRuntimeFiles = [
   "assets/dashboard.bundle.js",
   "assets/dashboard.bundle.css",
   "assets/widgets-redesign.css",
+  "assets/accessibility.css",
 ];
 
 for (const file of requiredRuntimeFiles) requireFile(file);
@@ -81,17 +78,9 @@ try {
 }
 
 if (manifest) {
-  if (manifest.manifest_version !== 3) {
-    fail("manifest_version must be 3.");
-  }
-
-  if (!manifest.name || typeof manifest.name !== "string") {
-    fail("manifest.name must be a non-empty string.");
-  }
-
-  if (!manifest.version || typeof manifest.version !== "string") {
-    fail("manifest.version must be a non-empty string.");
-  }
+  if (manifest.manifest_version !== 3) fail("manifest_version must be 3.");
+  if (!manifest.name || typeof manifest.name !== "string") fail("manifest.name must be a non-empty string.");
+  if (!manifest.version || typeof manifest.version !== "string") fail("manifest.version must be a non-empty string.");
 
   const newTab = manifest.chrome_url_overrides?.newtab;
   if (newTab !== "index.html") {
@@ -119,16 +108,14 @@ if (manifest) {
 const htmlPath = path.join(root, "index.html");
 if (fs.existsSync(htmlPath)) {
   const html = fs.readFileSync(htmlPath, "utf8");
-  const refs = [
-    ...html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/g),
-  ];
+  const refs = [...html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/g)];
 
-  if (!html.includes('id="root"')) {
-    fail('index.html must include the dashboard mount element with id="root".');
-  }
-
+  if (!html.includes('id="root"')) fail('index.html must include the dashboard mount element with id="root".');
   if (!refs.some(([, reference]) => reference === "./assets/dashboard.bundle.js")) {
     fail("index.html must load ./assets/dashboard.bundle.js.");
+  }
+  if (!refs.some(([, reference]) => reference === "./assets/accessibility.css")) {
+    fail("index.html must load ./assets/accessibility.css.");
   }
 
   for (const [, reference] of refs) {
@@ -151,6 +138,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(
-  `SmritiTab extension verification passed (${uniqueChecked.length} required files checked).`,
-);
+console.log(`SmritiTab extension verification passed (${uniqueChecked.length} required files checked).`);
