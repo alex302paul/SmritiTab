@@ -13,6 +13,7 @@
 | `assets/dashboard.bundle.js` | Dashboard application and feature behavior | Present; syntax checked |
 | `assets/dashboard.bundle.css` | Main dashboard styling | Present |
 | `assets/widgets-redesign.css` | Widget-row styling overrides | Present |
+| `assets/accessibility.css` | Keyboard focus and forced-colors overrides | Present; loaded after dashboard styles |
 
 The committed production bundle is the runtime source of truth and is intentionally preserved.
 
@@ -96,6 +97,6 @@ These checks require a real Chrome profile and are **not claimed as completed**:
 - [x] Permissions and persistence namespace documented.
 - [x] Existing extension retained as runtime baseline; no forced framework migration.
 - [x] Static verification and deterministic packaging workflow documented.
-- [x] Manual Chrome verification scenarios documented and handed off to Phase 3/4 QA.
+- [x] Manual Chrome verification scenarios documented for final release QA.
 
-**Phase 2 status: COMPLETE.** Repository/runtime audit, compatibility inventory and static verification are complete. Live-browser execution is intentionally part of the upcoming testing and QA phases, not a claim made by this audit. Source recovery is not required.
+**Phase 2 status: COMPLETE.** Repository/runtime audit, compatibility inventory and static verification are complete. The live-browser matrix remains an explicit release smoke-test responsibility, not a claim made by this audit. Source recovery is not required.
