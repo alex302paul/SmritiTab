@@ -14,7 +14,7 @@ npm run verify:dist
 
 ## Automated coverage
 
-The current regression suite covers:
+The current regression suite contains **14 passing tests across three suites**:
 
 - Service-worker context-menu registration on install.
 - Coalescing overlapping install/startup registration.
@@ -23,14 +23,18 @@ The current regression suite covers:
 - Keyboard command handoff for search and focus mode.
 - Ignoring unknown keyboard commands.
 - Required Chrome permissions for implemented dashboard features.
-- The `smrititab:v1` storage namespace and persisted key compatibility.
+- The `smrititab:v1` storage namespace and persisted-key compatibility.
+- Accessibility stylesheet load order.
+- Orange keyboard-focus styling and Windows forced-colors support.
+- Retention of the generated dashboard's reduced-motion support.
+- Single-row, horizontally scrollable Weather → Clock → Quote widget behavior on narrow screens.
 - Acceptance of the checked-in runtime by the static verifier.
-- Rejection of a package with missing required runtime assets.
+- Rejection of a package with a missing required runtime asset.
 
 The tests use a mocked Chrome API for service-worker behavior. They do not replace real-browser tests of Chrome's actual permissions, bookmarks, clipboard, tab groups, geolocation, rendering or persistence behavior.
 
 ## GitHub Actions
 
-The `Extension CI` workflow runs on pushes to `main`, pull requests and manual dispatch. It installs from the lockfile, runs tests, verifies the checked-in runtime, creates `dist/`, verifies the generated package and uploads the unpacked extension as a seven-day workflow artifact.
+The `Extension CI` workflow runs on pushes to `main`, pull requests and manual dispatch. It uses Node.js 22, installs from the lockfile, runs tests, verifies the checked-in runtime, creates `dist/`, verifies the generated package and uploads the unpacked extension as a seven-day workflow artifact.
 
-A successful CI run proves the automated checks and package pipeline passed. It does not certify the manual Chrome QA matrix; see [runtime audit](runtime-audit.md).
+The latest verified CI run is linked from the [release-readiness checklist](release-readiness.md). A successful CI run proves the automated checks and package pipeline passed. It does not certify the manual Chrome QA matrix; see [runtime audit](runtime-audit.md) and [accessibility QA](accessibility.md).
