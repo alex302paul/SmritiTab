@@ -8,6 +8,10 @@
 - The existing generated dashboard stylesheet already supports `prefers-reduced-motion: reduce`; the widget overrides also remove hover transitions.
 - The Weather → Clock → Quote widget strip stays in one row. On narrow screens it becomes horizontally scrollable with touch momentum, visible orange scrollbar thumb and snap points. Very narrow screens receive narrower card tracks instead of a forced vertical stack.
 
+## Phase 4 exit status
+
+**Phase 4 implementation: COMPLETE.** The keyboard-focus, forced-colors and responsive widget-strip refinements are committed, and automated regression coverage passes. Real Chrome/assistive-technology checks are explicitly carried into Phase 5 release QA; they are not represented as already executed.
+
 ## Manual verification checklist
 
 Run these checks in Chrome with the extension loaded from both the repository root and `dist/`:
