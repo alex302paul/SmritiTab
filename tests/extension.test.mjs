@@ -72,7 +72,7 @@ function createChromeMock() {
   return { chrome, calls };
 }
 
-async function loadServiceWorker() {
+function assertJsonEqual(actual, expected) {\n  assert.deepEqual(JSON.parse(JSON.stringify(actual)), expected);\n}\n\nasync function loadServiceWorker() {
   const { chrome, calls } = createChromeMock();
   const source = fs.readFileSync(serviceWorkerPath, "utf8");
   vm.runInNewContext(source, { chrome, console }, { filename: serviceWorkerPath });
@@ -87,7 +87,7 @@ describe("SmritiTab service worker", () => {
     await new Promise((resolve) => setImmediate(resolve));
 
     assert.equal(calls.removeAll, 1);
-    assert.deepEqual(calls.createdMenus[0], {
+    assertJsonEqual(calls.createdMenus[0], {
       id: "smrititab-search-selection",
       title: 'Search SmritiTab for "%s"',
       contexts: ["selection"],
@@ -115,10 +115,10 @@ describe("SmritiTab service worker", () => {
       selectionText: "  useful research  ",
     });
 
-    assert.deepEqual(calls.storageWrites[0], {
+    assertJsonEqual(calls.storageWrites[0], {
       "smrititab:v1:pending-search": "useful research",
     });
-    assert.deepEqual(calls.openedTabs[0], {
+    assertJsonEqual(calls.openedTabs[0], {
       url: "chrome-extension://smrititab/index.html",
       active: true,
     });
@@ -146,7 +146,7 @@ describe("SmritiTab service worker", () => {
     await chrome.commands.onCommand.emit("open-search");
     await chrome.commands.onCommand.emit("toggle-focus-mode");
 
-    assert.deepEqual(calls.storageWrites, [
+    assertJsonEqual(calls.storageWrites, [
       { "smrititab:v1:pending-action": "focus-search" },
       { "smrititab:v1:pending-action": "toggle-focus" },
     ]);
