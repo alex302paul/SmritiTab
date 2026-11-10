@@ -31,9 +31,9 @@ SmritiTab/
 │   └── service-worker.js        # Manifest V3 background service worker
 ├── docs/
 │   ├── architecture.md
-│   ├── build-and-source-recovery.md
+│   ├── build.md
 │   ├── runtime-audit.md         # Phase 2 feature and compatibility audit
-│   └── source-recovery-map.md   # Runtime baseline and compatibility notes
+│   └── runtime-baseline.md   # Runtime baseline and compatibility notes
 ├── index.html                  # New Tab entry point
 ├── manifest.json               # Chrome extension manifest
 └── README.md
