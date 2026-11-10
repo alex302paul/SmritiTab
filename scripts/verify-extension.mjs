@@ -57,7 +57,7 @@ function resolveExtensionPath(value, sourceFile) {
     path.posix.join(path.posix.dirname(sourceFile), clean),
   );
 
-  return resolved === ".." || resolved.startsWith("../") ? resolved : resolved;
+  return resolved;
 }
 
 const requiredRuntimeFiles = [
