@@ -9,6 +9,7 @@
 
 ```sh
 npm ci
+npm test
 npm run verify
 npm run build
 npm run verify:dist
