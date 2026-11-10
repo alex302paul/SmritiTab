@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const root = path.resolve(process.argv[2] || ".");
@@ -12,42 +11,69 @@ function fail(message) {
 }
 
 function requireFile(relativePath) {
-  const absolutePath = path.join(root, relativePath);
-  if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
-    fail(`Missing required file: ${relativePath}`);
+  const absolutePath = path.resolve(root, relativePath);
+  const relativeToRoot = path.relative(root, absolutePath);
+
+  if (
+    relativeToRoot.startsWith("..") ||
+    path.isAbsolute(relativeToRoot) ||
+    !fs.existsSync(absolutePath) ||
+    !fs.statSync(absolutePath).isFile()
+  ) {
+    fail(`Missing or unsafe required file: ${relativePath}`);
     return false;
   }
+
   checked.push(relativePath);
   return true;
 }
 
 function checkJavaScript(relativePath) {
   if (!requireFile(relativePath)) return;
+
   const result = spawnSync(
     process.execPath,
-    ["--check", path.join(root, relativePath)],
+    ["--check", path.resolve(root, relativePath)],
     { encoding: "utf8" },
   );
+
   if (result.status !== 0) {
     fail(`JavaScript syntax check failed for ${relativePath}:\n${result.stderr || result.stdout}`);
   }
 }
 
 function resolveExtensionPath(value, sourceFile) {
-  if (!value || typeof value !== "string" || /^[a-z]+:/i.test(value) || value.startsWith("//")) {
+  if (
+    !value ||
+    typeof value !== "string" ||
+    /^[a-z]+:/i.test(value) ||
+    value.startsWith("//")
+  ) {
     return null;
   }
+
   const clean = value.split(/[?#]/, 1)[0];
-  return path.posix.normalize(path.posix.join(path.posix.dirname(sourceFile), clean));
+  const resolved = path.posix.normalize(
+    path.posix.join(path.posix.dirname(sourceFile), clean),
+  );
+
+  return resolved === ".." || resolved.startsWith("../") ? resolved : resolved;
 }
+
+const requiredRuntimeFiles = [
+  "manifest.json",
+  "index.html",
+  "background/service-worker.js",
+  "assets/dashboard.bundle.js",
+  "assets/dashboard.bundle.css",
+  "assets/widgets-redesign.css",
+];
+
+for (const file of requiredRuntimeFiles) requireFile(file);
 
 const manifestPath = path.join(root, "manifest.json");
-if (!requireFile("manifest.json")) {
-  console.error("Extension verification failed: manifest.json is missing.");
-  process.exit(1);
-}
-
 let manifest;
+
 try {
   manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 } catch (error) {
@@ -55,13 +81,31 @@ try {
 }
 
 if (manifest) {
-  if (manifest.manifest_version !== 3) fail("manifest_version must be 3.");
+  if (manifest.manifest_version !== 3) {
+    fail("manifest_version must be 3.");
+  }
+
+  if (!manifest.name || typeof manifest.name !== "string") {
+    fail("manifest.name must be a non-empty string.");
+  }
+
+  if (!manifest.version || typeof manifest.version !== "string") {
+    fail("manifest.version must be a non-empty string.");
+  }
 
   const newTab = manifest.chrome_url_overrides?.newtab;
-  if (newTab && !requireFile(newTab)) fail(`New Tab entry point does not exist: ${newTab}`);
+  if (newTab !== "index.html") {
+    fail('chrome_url_overrides.newtab must point to "index.html".');
+  } else {
+    requireFile(newTab);
+  }
 
   const worker = manifest.background?.service_worker;
-  if (worker) checkJavaScript(worker);
+  if (!worker) {
+    fail("background.service_worker must be configured.");
+  } else {
+    checkJavaScript(worker);
+  }
 
   for (const iconPath of Object.values(manifest.icons || {})) {
     if (typeof iconPath === "string") requireFile(iconPath);
@@ -74,20 +118,30 @@ if (manifest) {
 
 const htmlPath = path.join(root, "index.html");
 if (fs.existsSync(htmlPath)) {
-  checked.push("index.html");
   const html = fs.readFileSync(htmlPath, "utf8");
   const refs = [
     ...html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/g),
   ];
 
+  if (!html.includes('id="root"')) {
+    fail('index.html must include the dashboard mount element with id="root".');
+  }
+
+  if (!refs.some(([, reference]) => reference === "./assets/dashboard.bundle.js")) {
+    fail("index.html must load ./assets/dashboard.bundle.js.");
+  }
+
   for (const [, reference] of refs) {
     const resolved = resolveExtensionPath(reference, "index.html");
     if (!resolved) continue;
-    if (!requireFile(resolved)) fail(`index.html references a missing local asset: ${reference}`);
+
+    if (!requireFile(resolved)) {
+      fail(`index.html references a missing or unsafe local asset: ${reference}`);
+      continue;
+    }
+
     if (/\.m?js$/i.test(resolved)) checkJavaScript(resolved);
   }
-} else {
-  fail("Missing required file: index.html");
 }
 
 const uniqueChecked = [...new Set(checked)];
@@ -97,4 +151,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`SmritiTab extension verification passed (${uniqueChecked.length} required files checked).`);
+console.log(
+  `SmritiTab extension verification passed (${uniqueChecked.length} required files checked).`,
+);
