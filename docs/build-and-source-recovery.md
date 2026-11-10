@@ -1,46 +1,34 @@
-# Build and source recovery
+# Build and package the existing extension
 
-## Reproducible extension package
-
-The repository now includes a dependency-free Node.js packaging workflow.
-
-Requirements:
+## Requirements
 
 - Node.js 20 or newer
 - npm (ships with Node.js)
 
-Commands:
+## Commands
 
 ```sh
+npm ci
 npm run verify
 npm run build
 npm run verify:dist
 ```
 
-- `npm run verify` validates the checked-in extension.
-- `npm run build` copies only the runtime extension files into a clean `dist/` directory and validates that package.
-- `npm run verify:dist` rechecks the generated package.
+- `npm run verify` checks the checked-in extension.
+- `npm run build` copies current runtime files into a clean `dist/` directory and verifies the package.
+- `npm run verify:dist` checks the generated package again.
 - `dist/` is generated output and is intentionally ignored by Git.
 
-The build does not rewrite, minify, or otherwise mutate the committed dashboard bundle. It preserves the current Manifest V3 entry points and relative asset paths.
+## What the build does
 
-## Important source-recovery limitation
+The build copies the existing Manifest V3 runtime files unchanged: `manifest.json`, `index.html`, `background/service-worker.js`, `assets/dashboard.bundle.js`, `assets/dashboard.bundle.css` and `assets/widgets-redesign.css`.
 
-The original React/Vite source project is not present in the available Git history or current branches. The existing `assets/dashboard.bundle.js` is a compiled production artifact. Formatting or renaming that bundle would not recover the original component boundaries, types, hooks, or authoring intent.
+It does not compile React, run Vite, regenerate the production bundle, alter storage keys or migrate user data. No React/Vite source recovery is required.
 
-For that reason this phase establishes a deterministic, verifiable packaging baseline without pretending that the minified bundle is maintainable source. The bundle remains the compatibility baseline while readable feature modules are reconstructed and behavior is checked.
+Load `dist/` through `chrome://extensions` → **Developer mode** → **Load unpacked** to test the packaged extension.
 
-Do not replace the runtime bundle with a partial rewrite. A future source migration must preserve existing storage keys and user data, and must pass feature parity checks for bookmarks, search, notes, widgets, dock, wallpaper, and focus mode before the extension entry point is switched.
+## Compatibility
 
-## Runtime package contents
+The committed production assets are the runtime baseline. Keep them intact unless a change has been verified against the current feature inventory and existing user data. Do not replace the app with a partial rewrite.
 
-The generated package includes:
-
-- `manifest.json`
-- `index.html`
-- `background/service-worker.js`
-- `assets/dashboard.bundle.js`
-- `assets/dashboard.bundle.css`
-- `assets/widgets-redesign.css`
-
-No source-only documentation or development scripts are copied into the extension package.
+See [Phase 2 runtime audit](runtime-audit.md) for confirmed feature inventory and remaining manual Chrome checks.
