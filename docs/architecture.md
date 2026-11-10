@@ -35,4 +35,4 @@ This is a packaging workflow, not a React/Vite compilation pipeline.
 - Do not remove a permission until runtime usage has been checked.
 - Keep the current production assets loadable until changes pass static checks and live Chrome verification.
 
-See [Phase 2 runtime audit](runtime-audit.md) for the feature inventory, permission map, persistence keys and manual verification matrix. See [build workflow](build-and-source-recovery.md) for packaging commands.
+See [Phase 2 runtime audit](runtime-audit.md) for the feature inventory, permission map, persistence keys and manual verification matrix. See [build workflow](build.md) for packaging commands.
