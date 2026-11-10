@@ -1,0 +1,7 @@
+# Generated extension package
+dist/
+
+# Local tooling / OS files
+node_modules/
+.DS_Store
+*.log
