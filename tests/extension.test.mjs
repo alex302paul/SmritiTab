@@ -20,9 +20,6 @@ function createEvent() {
     async emit(...args) {
       for (const listener of listeners) await listener(...args);
     },
-    get listenerCount() {
-      return listeners.length;
-    },
   };
 }
 
@@ -72,7 +69,11 @@ function createChromeMock() {
   return { chrome, calls };
 }
 
-function assertJsonEqual(actual, expected) {\n  assert.deepEqual(JSON.parse(JSON.stringify(actual)), expected);\n}\n\nasync function loadServiceWorker() {
+function assertJsonEqual(actual, expected) {
+  assert.deepEqual(JSON.parse(JSON.stringify(actual)), expected);
+}
+
+async function loadServiceWorker() {
   const { chrome, calls } = createChromeMock();
   const source = fs.readFileSync(serviceWorkerPath, "utf8");
   vm.runInNewContext(source, { chrome, console }, { filename: serviceWorkerPath });
