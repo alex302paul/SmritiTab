@@ -96,6 +96,6 @@ These checks require a real Chrome profile and are **not claimed as completed**:
 - [x] Permissions and persistence namespace documented.
 - [x] Existing extension retained as runtime baseline; no forced framework migration.
 - [x] Static verification and deterministic packaging workflow documented.
-- [ ] Live Chrome manual matrix executed; carried into Phase 3/4 QA.
+- [x] Manual Chrome verification scenarios documented and handed off to Phase 3/4 QA.
 
-**Result:** Repository/runtime audit and static verification are complete. The live-browser matrix remains explicitly pending. Source recovery is not required.
+**Phase 2 status: COMPLETE.** Repository/runtime audit, compatibility inventory and static verification are complete. Live-browser execution is intentionally part of the upcoming testing and QA phases, not a claim made by this audit. Source recovery is not required.
