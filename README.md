@@ -6,7 +6,7 @@ SmritiTab is a Manifest V3 Chrome extension that replaces Chrome's New Tab page 
 
 The existing committed dashboard bundle is the production runtime and compatibility baseline. SmritiTab is maintained as an existing extension; recovering or migrating a separate React/Vite source project is not a prerequisite for improving it.
 
-The repository includes a dependency-free Node.js workflow to verify and package the current extension. It copies production assets unchanged. See [automated testing](docs/testing.md), [accessibility and UX QA](docs/accessibility.md) and [Phase 2 runtime audit](docs/runtime-audit.md) for feature inventory, permissions, persistence keys and QA guidance.
+The repository includes a dependency-free Node.js workflow to verify and package the current extension. It copies production assets unchanged. See [automated testing](docs/testing.md), [accessibility and UX QA](docs/accessibility.md), [Phase 2 runtime audit](docs/runtime-audit.md) and [final release readiness](docs/release-readiness.md) for feature inventory, permissions, persistence keys and QA guidance.
 
 ## Install locally
 
@@ -15,6 +15,8 @@ The repository includes a dependency-free Node.js workflow to verify and package
 3. Enable **Developer mode**.
 4. Select **Load unpacked** and choose the repository root (the directory containing `manifest.json`).
 5. Open a new tab to load SmritiTab.
+
+For the packaged copy, run the build commands below and load the generated `dist/` directory instead.
 
 ## Repository layout
 
@@ -35,7 +37,8 @@ SmritiTab/
 │   ├── build.md
 │   ├── runtime-audit.md         # Phase 2 feature and compatibility audit
 │   ├── testing.md               # Automated regression tests and CI
-│   └── accessibility.md         # Phase 4 accessibility and manual UX QA
+│   ├── accessibility.md         # Phase 4 accessibility and manual UX QA
+│   └── release-readiness.md     # Phase 5 final QA and release gate
 ├── index.html                  # New Tab entry point
 ├── manifest.json               # Chrome extension manifest
 └── README.md
