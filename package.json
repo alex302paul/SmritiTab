@@ -1,0 +1,15 @@
+{
+  "name": "smrititab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SmritiTab Chrome extension packaging and verification tools",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "verify": "node scripts/verify-extension.mjs .",
+    "build": "node scripts/build-extension.mjs",
+    "verify:dist": "node scripts/verify-extension.mjs dist"
+  }
+}
