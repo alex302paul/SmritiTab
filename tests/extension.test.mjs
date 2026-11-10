@@ -164,6 +164,53 @@ describe("SmritiTab service worker", () => {
   });
 });
 
+describe("extension compatibility contracts", () => {
+  it("keeps Chrome permissions required by implemented dashboard features", () => {
+    const manifest = JSON.parse(fs.readFileSync(path.join(projectRoot, "manifest.json"), "utf8"));
+    const permissions = new Set(manifest.permissions || []);
+
+    for (const permission of [
+      "storage",
+      "bookmarks",
+      "history",
+      "tabs",
+      "tabGroups",
+      "contextMenus",
+      "clipboardRead",
+      "clipboardWrite",
+    ]) {
+      assert.ok(permissions.has(permission), `Missing required permission: ${permission}`);
+    }
+  });
+
+  it("preserves the current persisted data namespace and keys", () => {
+    const bundle = fs.readFileSync(path.join(projectRoot, "assets", "dashboard.bundle.js"), "utf8");
+
+    assert.ok(bundle.includes("smrititab:v1"));
+    for (const key of [
+      "__meta",
+      "settings",
+      "profile",
+      "categories",
+      "apps",
+      "favorites",
+      "notes",
+      "todos",
+      "widgets",
+      "dock",
+      "windows",
+      "clipboard",
+      "quotes",
+      "weather",
+      "location",
+      "pending-search",
+      "pending-action",
+    ]) {
+      assert.ok(bundle.includes(`:${key}`), `Missing persisted storage key: ${key}`);
+    }
+  });
+});
+
 describe("extension verifier", () => {
   it("accepts the checked-in extension runtime", () => {
     const result = spawnSync(process.execPath, [verifierPath, projectRoot], {
