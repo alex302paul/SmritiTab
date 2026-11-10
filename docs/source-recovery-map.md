@@ -1,71 +1,25 @@
-# Source recovery map
+# Runtime baseline and compatibility notes
 
-## Audit result
+## Decision
 
-The current `main` branch contains a production React dashboard bundle, but not its original source project.
+SmritiTab is an existing, working Manifest V3 Chrome extension. The committed runtime is the product. Reconstructing an original React/Vite source project is not a requirement for maintaining or improving this extension, so no framework migration is planned.
 
-Verified on 2026-11-10:
+The current dashboard bundle and styles remain the compatibility baseline: `assets/dashboard.bundle.js`, `assets/dashboard.bundle.css`, `assets/widgets-redesign.css`, `index.html`, `background/service-worker.js` and `manifest.json`.
 
-- `assets/dashboard.bundle.js` — 376,834 bytes; bundled React application.
-- `assets/dashboard.bundle.css` — 55,263 bytes; generated stylesheet.
-- `assets/widgets-redesign.css` — 3,730 bytes; current widget-row overrides.
-- `index.html` — mounts the dashboard bundle into `#root`.
-- `background/service-worker.js` — separate Manifest V3 service worker.
-- No `src/`, `package.json`, lockfile, Vite config, TypeScript config, or source map exists on `main`.
-- Git history queries for `src` and `package.json` return no commits.
-- `Proper-Working-Prototype-V1` has the same generated-asset-only layout.
-- `backup/pre-reset-2026-11-06` contains a different LumiList extension (version 2.1.12), not SmritiTab's React source. It must not be used as a source replacement.
+Do not replace these files with a partial rewrite. Improve the current extension in small, verifiable changes and preserve existing behavior and user data.
 
-The existing dashboard bundle is the runtime baseline. Do not overwrite it with a partial rewrite or a placeholder app.
+## Compatibility constraints
 
-## Runtime feature inventory
+- Preserve the `smrititab:v1` storage namespace and existing keys.
+- Keep Manifest V3 New Tab and service-worker entry points valid.
+- Preserve bookmark CRUD, nested folders, move/reorder and tab-group actions.
+- Preserve search, history, notes, tasks, calculator, clipboard, favorites, weather, clock, quote, wallpaper, dock, settings, profile and focus-mode behavior.
+- Preserve keyboard commands and selection context-menu handoff.
+- Do not remove permissions until bundle and manual runtime checks show the corresponding API is unused.
+- Keep production assets loadable until changes pass static checks and live Chrome verification.
 
-The current bundle includes React root/context usage and browser integrations for:
+## Build workflow
 
-- Chrome storage and bookmarks.
-- Chrome tabs and tab groups.
-- Chrome history.
-- Search and keyboard interactions.
-- Notes and task-style dashboard content.
-- Weather via Open-Meteo and browser geolocation.
-- Clock and quote widgets.
-- Wallpaper/image loading.
-- Dock and internal app navigation.
-- Focus mode.
-- Bookmark manager with folder operations, drag/reorder, resizing and tab-group actions.
+The Node.js scripts package and verify the existing extension. They copy committed runtime assets unchanged into `dist/`; they do not compile React, regenerate bundles or require Vite.
 
-This is a behavioral inventory, not a claim that every feature has been exhaustively tested.
-
-## Recovery strategy
-
-1. Treat the committed bundle and styles as the golden compatibility baseline.
-2. Reconstruct readable React modules from observed behavior, keeping feature boundaries explicit.
-3. Move shared browser API access behind typed/adaptable service modules.
-4. Recreate the current visual structure and interactions before changing design or data formats.
-5. Add a pinned dependency manifest and lockfile only when the source entry points and actual dependency set are known.
-6. Build into a staging directory first; compare output and load the unpacked staging extension before switching the production entry point.
-7. Keep the existing production assets available until parity checks pass.
-
-## Proposed source boundaries
-
-- `src/app/` — application shell, routes/views, global providers.
-- `src/features/search/` — search input, suggestions and keyboard actions.
-- `src/features/bookmarks/` — bookmark dashboard and manager.
-- `src/features/widgets/` — weather, clock and quote.
-- `src/features/notes/` — notes and task content.
-- `src/features/dock/` — dock and internal app launcher.
-- `src/features/focus/` — focus mode.
-- `src/features/wallpaper/` — background selection and persistence.
-- `src/shared/chrome/` — typed wrappers around Chrome extension APIs.
-- `src/shared/storage/` — namespaced persistence and migrations.
-- `src/styles/` — tokens, global styles and feature styles.
-- `background/service-worker.js` — remains a separate MV3 entry point.
-
-## Non-negotiable parity checks
-
-- Existing user data remains readable; no storage namespace/key migration without an explicit migration.
-- Bookmark CRUD, nested folders, move/reorder, resizing and open-as-tab-group behavior remain intact.
-- Weather location fallback and manual city selection remain intact.
-- Search, keyboard shortcuts, dock, notes, wallpaper and focus mode remain available.
-- The current orange/black visual identity, theme behavior and horizontal Weather–Clock–Quote row are preserved.
-- The existing production bundle remains loadable until the staged build passes static and manual Chrome checks.
+See [Phase 2 runtime audit](runtime-audit.md) for the feature inventory, permission map, storage keys and manual verification matrix. See [Build workflow](build-and-source-recovery.md) for commands.
