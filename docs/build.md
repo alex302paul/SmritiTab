@@ -22,7 +22,7 @@ npm run verify:dist
 
 ## What the build does
 
-The build copies the existing Manifest V3 runtime files unchanged: `manifest.json`, `index.html`, `background/service-worker.js`, `assets/dashboard.bundle.js`, `assets/dashboard.bundle.css` and `assets/widgets-redesign.css`.
+The build copies the existing Manifest V3 runtime files unchanged: `manifest.json`, `index.html`, `background/service-worker.js` and the complete `assets/` directory (including the dashboard bundle, widget overrides and accessibility stylesheet).
 
 It does not compile React, run Vite, regenerate the production bundle, alter storage keys or migrate user data. No React/Vite source recovery is required.
 
@@ -32,4 +32,4 @@ Load `dist/` through `chrome://extensions` → **Developer mode** → **Load unp
 
 The committed production assets are the runtime baseline. Keep them intact unless a change has been verified against the current feature inventory and existing user data. Do not replace the app with a partial rewrite.
 
-See [Phase 2 runtime audit](runtime-audit.md) for confirmed feature inventory and remaining manual Chrome checks.
+See [Phase 2 runtime audit](runtime-audit.md) for confirmed feature inventory and remaining manual Chrome checks, and [accessibility and UX QA](accessibility.md) for Phase 4 checks.
