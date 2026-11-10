@@ -6,7 +6,7 @@ SmritiTab is a Manifest V3 browser extension that replaces Chrome's New Tab page
 
 The current dashboard is committed as a production bundle under `assets/`. The original React/Vite source project and package manifest are not present in this repository snapshot. The bundle is therefore treated as a generated artifact, not hand-maintained source code.
 
-The repository has been reorganized to make extension entry points and generated assets explicit. Reconstructing a maintainable dashboard source tree and a reproducible build pipeline is the next engineering step; do not edit the minified bundle directly.
+The repository now includes a dependency-free, reproducible extension packaging workflow. The original React/Vite source is still unavailable; the committed dashboard bundle remains the compatibility baseline and must not be edited directly. See [Build and source recovery](docs/build-and-source-recovery.md) for the verified limitation and build commands.
 
 ## Install locally
 
@@ -20,19 +20,37 @@ The repository has been reorganized to make extension entry points and generated
 
 ```text
 SmritiTab/
+├── scripts/
+│   ├── build-extension.mjs      # Reproducible extension package builder
+│   └── verify-extension.mjs     # Manifest, asset and JS syntax checks
 ├── assets/
 │   ├── dashboard.bundle.js       # Generated dashboard JavaScript
 │   └── dashboard.bundle.css      # Generated dashboard styles
 ├── background/
 │   └── service-worker.js         # Manifest V3 background service worker
 ├── docs/
-│   └── architecture.md           # Runtime boundaries and source recovery notes
+│   ├── architecture.md           # Runtime boundaries
+│   ├── build-and-source-recovery.md
+│   └── source-recovery-map.md     # Audit baseline and parity requirements
 ├── .editorconfig
 ├── .prettierrc.json
 ├── index.html                    # New Tab entry point
 ├── manifest.json                 # Chrome extension manifest
 └── README.md
 ```
+
+## Build and verify
+
+Requires Node.js 20 or newer. No third-party npm packages are required for the packaging workflow.
+
+```sh
+npm ci
+npm run verify
+npm run build
+npm run verify:dist
+```
+
+The build creates a clean `dist/` folder containing only the loadable extension files. Load `dist/` through `chrome://extensions` to test the packaged copy. The checked-in production assets are copied unchanged.
 
 ## Development conventions
 
