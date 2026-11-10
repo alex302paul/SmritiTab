@@ -1,12 +1,12 @@
 # SmritiTab
 
-SmritiTab is a Manifest V3 browser extension that replaces Chrome's New Tab page with a personal productivity dashboard.
+SmritiTab is a Manifest V3 Chrome extension that replaces Chrome's New Tab page with a personal productivity dashboard.
 
-## Current repository status
+## Project status
 
-The current dashboard is committed as a production bundle under `assets/`. The original React/Vite source project and package manifest are not present in this repository snapshot. The bundle is therefore treated as a generated artifact, not hand-maintained source code.
+The existing committed dashboard bundle is the production runtime and compatibility baseline. SmritiTab is maintained as an existing extension; recovering or migrating a separate React/Vite source project is not a prerequisite for improving it.
 
-The repository now includes a dependency-free, reproducible extension packaging workflow. The original React/Vite source is still unavailable; the committed dashboard bundle remains the compatibility baseline and must not be edited directly. See [Build and source recovery](docs/build-and-source-recovery.md) for the verified limitation and build commands.
+The repository includes a dependency-free Node.js workflow to verify and package the current extension. It copies production assets unchanged. See [Phase 2 runtime audit](docs/runtime-audit.md) for the feature inventory, permissions, persistence keys and manual verification checklist.
 
 ## Install locally
 
@@ -21,27 +21,27 @@ The repository now includes a dependency-free, reproducible extension packaging 
 ```text
 SmritiTab/
 ├── scripts/
-│   ├── build-extension.mjs      # Reproducible extension package builder
+│   ├── build-extension.mjs      # Deterministic package builder
 │   └── verify-extension.mjs     # Manifest, asset and JS syntax checks
 ├── assets/
-│   ├── dashboard.bundle.js       # Generated dashboard JavaScript
-│   └── dashboard.bundle.css      # Generated dashboard styles
+│   ├── dashboard.bundle.js      # Current dashboard runtime
+│   ├── dashboard.bundle.css     # Dashboard styles
+│   └── widgets-redesign.css     # Widget-row overrides
 ├── background/
-│   └── service-worker.js         # Manifest V3 background service worker
+│   └── service-worker.js        # Manifest V3 background service worker
 ├── docs/
-│   ├── architecture.md           # Runtime boundaries
+│   ├── architecture.md
 │   ├── build-and-source-recovery.md
-│   └── source-recovery-map.md     # Audit baseline and parity requirements
-├── .editorconfig
-├── .prettierrc.json
-├── index.html                    # New Tab entry point
-├── manifest.json                 # Chrome extension manifest
+│   ├── runtime-audit.md         # Phase 2 feature and compatibility audit
+│   └── source-recovery-map.md   # Runtime baseline and compatibility notes
+├── index.html                  # New Tab entry point
+├── manifest.json               # Chrome extension manifest
 └── README.md
 ```
 
 ## Build and verify
 
-Requires Node.js 20 or newer. No third-party npm packages are required for the packaging workflow.
+Requires Node.js 20 or newer. The packaging workflow has no third-party npm dependencies.
 
 ```sh
 npm ci
@@ -50,32 +50,30 @@ npm run build
 npm run verify:dist
 ```
 
-The build creates a clean `dist/` folder containing only the loadable extension files. Load `dist/` through `chrome://extensions` to test the packaged copy. The checked-in production assets are copied unchanged.
+The build creates a clean `dist/` folder containing loadable extension files. Load `dist/` through `chrome://extensions` to test the packaged copy. Checked-in production assets are copied unchanged.
 
 ## Development conventions
 
 - Keep the Chrome extension manifest at the repository root.
-- Keep browser-extension entry points in clearly named folders.
-- Treat files ending in `.bundle.js` or `.bundle.css` as generated output.
-- Format hand-written JavaScript, JSON, HTML, and CSS with Prettier.
-- Keep permissions minimal; remove a permission only after confirming the dashboard no longer uses its corresponding Chrome API.
-- Never commit secrets, API keys, or personal tokens.
+- Keep the current production runtime loadable while making changes.
+- Treat `.bundle.js` and `.bundle.css` files as generated/runtime artifacts; avoid casual manual edits.
+- Remove permissions only after confirming the dashboard no longer uses the corresponding Chrome API.
+- Never commit secrets, API keys or personal tokens.
+- Preserve the `smrititab:v1` storage namespace and existing user data.
 
 ## Permissions and privacy
 
-SmritiTab requests the following Chrome permissions for specific dashboard features:
+- `storage`: dashboard settings, notes, tasks, widgets and cached data.
+- `bookmarks`: bookmark folders and links.
+- `history`: browsing history and search suggestions.
+- `tabs`: active-tab details and opening dashboard tabs.
+- `tabGroups`: opening bookmark collections in tab groups.
+- `contextMenus`: selection-to-search action.
+- `clipboardRead` / `clipboardWrite`: clipboard interactions.
 
-- `storage`: persist dashboard settings, notes, tasks, widgets, and cached data.
-- `bookmarks`: read and manage bookmark folders and links.
-- `history`: provide the browsing-history view.
-- `tabs`: read the active page title and URL for **Save current tab**, and open dashboard tabs.
-- `tabGroups`: open selected bookmark collections in a tab group.
-- `contextMenus`: provide the selection-to-search context-menu action.
-- `clipboardRead` / `clipboardWrite`: power the clipboard manager and copy/paste actions.
+The weather widget first uses a previously selected city. If no city has been saved, it may request browser location access for a local forecast. If location access is denied or unavailable, choose a city from **Weather details** instead; SmritiTab should not silently substitute a different city based on browser timezone.
 
-The weather widget first uses a previously selected city. If no city has been saved, it may request browser location access to obtain coordinates for a local forecast. If location access is denied or unavailable, choose a city from **Weather details** instead; SmritiTab should not silently substitute a different city based on the browser timezone.
-
-Location is used to request weather coordinates from Open-Meteo. Review the browser's extension site permissions if you want to revoke location access. No location permission is requested until the weather widget needs it.
+Location is used to request weather coordinates from Open-Meteo. Review browser extension site permissions to revoke location access. No location permission is requested until the weather widget needs it.
 
 ## License
 
