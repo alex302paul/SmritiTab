@@ -15,15 +15,15 @@ Error generating stack: `+a.message+`
    s.jsx("h2",{className:"text-sm font-semibold text-slate-800 dark:text-slate-100",children:"Adult Links"}),
    s.jsx("span",{className:"text-[10px] text-slate-400",children:"16 categories · curated links"})
   ]}),
-  s.jsx("div",{className:"grid w-full grid-cols-1 items-stretch gap-3 sm:grid-cols-2 xl:grid-cols-4",children:groups.map((group,index)=>s.jsxs("article",{
-   className:"flex min-w-0 flex-col rounded-2xl border border-slate-900/10 bg-white/55 p-3 shadow-sm transition hover:border-orange-400/40 dark:border-white/10 dark:bg-white/[0.045]",
+  s.jsx("div",{className:"grid w-full grid-cols-2 items-start gap-2 md:grid-cols-4",children:groups.map((group,index)=>s.jsxs("article",{
+   className:"flex h-64 min-w-0 flex-col rounded-xl border border-slate-900/10 bg-white/55 p-2 shadow-sm transition hover:border-orange-400/40 dark:border-white/10 dark:bg-white/[0.045]",
    children:[
     s.jsxs("header",{className:"mb-2 flex items-center gap-2 border-b border-slate-900/5 pb-2 dark:border-white/10",children:[
      s.jsx("span",{className:"grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-orange-500/10 text-[11px] font-bold text-orange-600 dark:text-orange-300",children:String(index+1).padStart(2,"0")}),
      s.jsx("h3",{className:"min-w-0 flex-1 truncate text-xs font-semibold text-slate-800 dark:text-slate-100",children:group[0]}),
      s.jsx("span",{className:"text-[9px] tabular-nums text-slate-400",children:group[1].length})
     ]}),
-    s.jsx("ul",{className:"grid max-h-64 grid-cols-2 gap-1.5 overflow-y-auto overscroll-contain pr-1",children:group[1].map(([title,url])=>s.jsx("li",{className:"min-w-0",children:s.jsxs("button",{
+    s.jsx("ul",{className:"min-h-0 flex-1 grid grid-cols-1 gap-1 overflow-y-auto overscroll-contain pr-0.5",children:group[1].map(([title,url])=>s.jsx("li",{className:"min-w-0",children:s.jsxs("button",{
      type:"button",onClick:()=>m(url),title:title+" · "+url,
      className:"flex w-full min-w-0 items-center gap-1.5 rounded-lg px-1.5 py-2 text-left text-[11px] font-medium text-slate-700 transition hover:bg-orange-500/10 hover:text-orange-600 dark:text-slate-200 dark:hover:text-orange-300",
      children:[s.jsx(yh,{url,title}),s.jsx("span",{className:"min-w-0 truncate",children:title})]
