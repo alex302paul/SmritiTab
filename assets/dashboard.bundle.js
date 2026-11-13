@@ -16,16 +16,16 @@ Error generating stack: `+a.message+`
    s.jsx("span",{className:"text-[10px] text-slate-400",children:"16 categories · curated links"})
   ]}),
   s.jsx("div",{className:"grid w-full grid-cols-2 gap-1.5 sm:grid-cols-4",children:groups.map((group,index)=>s.jsxs("article",{
-   className:"flex h-24 w-full min-w-0 flex-col overflow-hidden rounded-xl border border-slate-900/10 bg-white/65 p-1.5 shadow-sm transition hover:border-orange-400/50 hover:shadow-md dark:border-white/10 dark:bg-white/[0.06]",
+   className:"flex h-16 w-full min-w-0 flex-col overflow-hidden rounded-lg border border-slate-900/10 bg-white/65 p-1 shadow-sm transition hover:border-orange-400/50 hover:shadow-md dark:border-white/10 dark:bg-white/[0.06]",
    children:[
-    s.jsxs("header",{className:"mb-1 flex shrink-0 items-center gap-1 border-b border-slate-900/5 pb-1 dark:border-white/10",children:[
+    s.jsxs("header",{className:"mb-0.5 flex shrink-0 items-center gap-1 border-b border-slate-900/5 pb-0.5 dark:border-white/10",children:[
      s.jsx("span",{className:"grid h-4 w-4 shrink-0 place-items-center rounded-md bg-orange-500/10 text-[9px] font-bold text-orange-600 dark:text-orange-300",children:String(index+1).padStart(2,"0")}),
-     s.jsx("h3",{className:"min-w-0 flex-1 truncate text-[10px] font-semibold text-slate-800 dark:text-slate-100",children:group[0]}),
+     s.jsx("h3",{className:"min-w-0 flex-1 truncate text-[9px] font-semibold text-slate-800 dark:text-slate-100",children:group[0]}),
      s.jsx("span",{className:"text-[8px] tabular-nums text-slate-400",children:group[1].length})
     ]}),
     s.jsx("ul",{className:"min-h-0 flex-1 grid grid-cols-1 gap-0.5 overflow-y-auto overscroll-contain pr-0.5",children:group[1].map(([title,url])=>s.jsx("li",{className:"min-w-0",children:s.jsxs("button",{
      type:"button",onClick:()=>m(url),title:title+" · "+url,
-     className:"flex w-full min-w-0 items-center gap-1.5 rounded-md px-1 py-0.5 text-left text-[9px] font-medium text-slate-700 transition hover:bg-orange-500/10 hover:text-orange-600 dark:text-slate-200 dark:hover:text-orange-300",
+     className:"flex w-full min-w-0 items-center gap-1 rounded-md px-0.5 py-0 text-left text-[8px] font-medium text-slate-700 transition hover:bg-orange-500/10 hover:text-orange-600 dark:text-slate-200 dark:hover:text-orange-300",
      children:[s.jsx(yh,{url,title}),s.jsx("span",{className:"min-w-0 truncate",children:title})]
     })},url))})
    ]
