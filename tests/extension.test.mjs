@@ -172,15 +172,14 @@ describe("extension compatibility contracts", () => {
     const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
     assert.ok(html.includes("./assets/cards-masonry.js"));
     const script = fs.readFileSync(path.join(projectRoot, "assets", "cards-masonry.js"), "utf8");
-    assert.match(script, /ResizeObserver/);
-    assert.match(script, /requestAnimationFrame/);
-    assert.match(script, /card\\.style\\.left/);
-    assert.match(script, /card\\.style\\.top/);
+    assert.ok(script.includes("ResizeObserver"));
+    assert.ok(script.includes("requestAnimationFrame"));
+    assert.ok(script.includes("card.style.left"));
+    assert.ok(script.includes("card.style.top"));
     const css = fs.readFileSync(path.join(projectRoot, "assets", "cards-sticky.css"), "utf8");
-    assert.match(css, /smriti-masonry-card/);
-    assert.match(css, /resize:\\s*both/);
+    assert.ok(css.includes("smriti-masonry-card"));
+    assert.ok(css.includes("resize: both"));
   });
-
   it("keeps keyboard focus visible with the orange accent and supports forced colors", () => {
     const css = fs.readFileSync(path.join(projectRoot, "assets", "accessibility.css"), "utf8");
     assert.match(css, /:focus-visible/);
