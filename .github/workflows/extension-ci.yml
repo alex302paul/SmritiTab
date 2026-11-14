@@ -93,7 +93,7 @@ jobs:
           if (manifest.chrome_url_overrides?.newtab !== "index.html") throw new Error("New Tab override missing");
           if (!fs.existsSync(path.join(root, manifest.background.service_worker))) throw new Error("Service worker missing");
           const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
-          if (/<script(?![^>]*\\bsrc=)[^>]*>/i.test(html)) throw new Error("Inline script blocked by MV3 CSP");
+          if (/<script(?![^>]*\bsrc=)[^>]*>/i.test(html)) throw new Error("Inline script blocked by MV3 CSP");
           const refs = [...html.matchAll(/(?:src|href)=["']([^"']+)["']/g)].map(m => m[1]);
           for (const ref of refs) {
             if (/^(https?:|data:|#)/i.test(ref)) continue;
