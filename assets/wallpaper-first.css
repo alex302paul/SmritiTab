@@ -17,7 +17,6 @@ body.smriti-search-open .smriti-wallpaper-shell form[role="search"],
 body.smriti-search-hover .smriti-wallpaper-shell form[role="search"] {
   opacity: 1 !important; pointer-events: auto !important; transform: translate(-50%, 0) !important;
 }
-.smriti-wallpaper-shell > .transition-opacity { display: none !important; }
 .smriti-wallpaper-shell nav[aria-label="Dock"] {
   z-index: 130 !important; bottom: 14px !important; transform: translate(-50%, calc(100% + 24px)) !important;
   opacity: 0 !important; pointer-events: none !important;

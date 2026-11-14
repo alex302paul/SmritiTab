@@ -89,13 +89,11 @@
     });
     const dockTrigger = $("#smriti-dock-trigger");
     const dockNav = $('nav[aria-label="Dock"]', shell);
+    const searchTrigger = $("#smriti-search-trigger");
     dockTrigger?.addEventListener("mouseenter", () => document.body.classList.add("smriti-dock-open"));
     dockNav?.addEventListener("mouseenter", () => document.body.classList.add("smriti-dock-open"));
-    dockNav?.addEventListener("mouseleave", () => { if(!dockPinned) document.body.classList.remove("smriti-dock-open"); });
-    const searchTrigger = $("#smriti-search-trigger");
     searchTrigger?.addEventListener("mouseenter", () => document.body.classList.add("smriti-search-open"));
-    search?.addEventListener("mouseleave", () => { if(!searchPinned) document.body.classList.remove("smriti-search-open"); });
-    searchTrigger?.addEventListener("mouseleave", () => { if(!searchPinned) document.body.classList.remove("smriti-search-open"); });
+    search?.addEventListener("mouseenter", () => document.body.classList.add("smriti-search-open"));
     const menu = button("Open app launcher","smriti-menu-button","smriti-launcher-menu"); menu.textContent = "▦ Menu";
     if (dockNav) dockNav.append(menu); else {
       menu.style.position="fixed"; menu.style.bottom="14px"; menu.style.left="50%"; menu.style.zIndex="140"; menu.style.transform="translateX(-50%)"; document.body.append(menu);
@@ -111,9 +109,7 @@
     });
     const rightTrigger = $("#smriti-settings-trigger");
     rightTrigger?.addEventListener("mouseenter", () => $("#smriti-right-controls")?.classList.add("is-visible"));
-    rightTrigger?.addEventListener("mouseleave", () => $("#smriti-right-controls")?.classList.remove("is-visible"));
     $("#smriti-right-controls")?.addEventListener("mouseenter", () => $("#smriti-right-controls")?.classList.add("is-visible"));
-    $("#smriti-right-controls")?.addEventListener("mouseleave", () => $("#smriti-right-controls")?.classList.remove("is-visible"));
     document.addEventListener("keydown", e => { if(e.key === "Escape" && activeOverlay) closeOverlay(); });
     if (search) window.addEventListener("keydown", e => { if(e.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); setSearch(true); } });
   }
@@ -137,15 +133,36 @@
   if ($("#root > div")) { install($("#root > div")); revealZones(); }
   document.addEventListener("pointermove", e => {
     if (e.pointerType === "touch" || activeOverlay) return;
-    const w=window.innerWidth,h=window.innerHeight;
-    document.body.classList.toggle("smriti-edge-left", e.clientX < 64 && e.clientY > h*.32 && e.clientY < h*.68);
-    document.body.classList.toggle("smriti-edge-bottom", e.clientY > h-36 && e.clientX > w*.35 && e.clientX < w*.65);
-    document.body.classList.toggle("smriti-edge-top", e.clientY < 36 && e.clientX > w*.35 && e.clientX < w*.65);
-    document.body.classList.toggle("smriti-edge-right", e.clientX > w-64 && e.clientY > h*.32 && e.clientY < h*.68);
-    [["left","#smriti-quick-trigger"],["bottom","#smriti-dock-trigger"],["top","#smriti-search-trigger"],["right","#smriti-settings-trigger"]].forEach(([edge,sel])=>$(sel)?.classList.toggle("is-visible",document.body.classList.contains("smriti-edge-"+edge)));
-    $("#smriti-right-controls")?.classList.toggle("is-visible",document.body.classList.contains("smriti-edge-right"));
-    if (!document.body.classList.contains("smriti-edge-bottom") && !dockPinned && !dock?.matches(":hover")) setDock(false);
-    if (!document.body.classList.contains("smriti-edge-top") && !searchPinned && !search?.matches(":hover")) setSearch(false);
+    const w = window.innerWidth, h = window.innerHeight;
+    const inside = el => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    };
+    const quickTrigger = $("#smriti-quick-trigger");
+    const dockTrigger = $("#smriti-dock-trigger");
+    const searchTrigger = $("#smriti-search-trigger");
+    const settingsTrigger = $("#smriti-settings-trigger");
+    const rightControls = $("#smriti-right-controls");
+    const left = e.clientX < 64 && e.clientY > h*.32 && e.clientY < h*.68;
+    const bottom = e.clientY > h-36 && e.clientX > w*.35 && e.clientX < w*.65;
+    const top = e.clientY < 36 && e.clientX > w*.35 && e.clientX < w*.65;
+    const right = e.clientX > w-64 && e.clientY > h*.32 && e.clientY < h*.68;
+    document.body.classList.toggle("smriti-edge-left", left);
+    document.body.classList.toggle("smriti-edge-bottom", bottom);
+    document.body.classList.toggle("smriti-edge-top", top);
+    document.body.classList.toggle("smriti-edge-right", right);
+    quickTrigger?.classList.toggle("is-visible", left || inside(quickTrigger));
+    dockTrigger?.classList.toggle("is-visible", bottom || inside(dockTrigger));
+    searchTrigger?.classList.toggle("is-visible", top || inside(searchTrigger));
+    settingsTrigger?.classList.toggle("is-visible", right || inside(settingsTrigger));
+    rightControls?.classList.toggle("is-visible", right || inside(settingsTrigger) || inside(rightControls));
+    const overDock = inside(dockTrigger) || inside(dock);
+    const overSearch = inside(searchTrigger) || inside(search);
+    if (bottom || overDock) document.body.classList.add("smriti-dock-open");
+    else if (!dockPinned) setDock(false);
+    if (top || overSearch) document.body.classList.add("smriti-search-open");
+    else if (!searchPinned) setSearch(false);
   });
   window.addEventListener("resize", () => { if(activeOverlay) closeOverlay(); });
 })();
