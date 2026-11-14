@@ -83,19 +83,19 @@
         if(edge === "bottom") setDock(!document.body.classList.contains("smriti-dock-open"));
         if(edge === "top") setSearch(!document.body.classList.contains("smriti-search-open"));
         if(edge === "right") {
-          document.body.classList.toggle("smriti-right-open");
+          $("#smriti-right-controls")?.classList.toggle("is-visible");
         }
       });
     });
     const dockTrigger = $("#smriti-dock-trigger");
     const dockNav = $('nav[aria-label="Dock"]', shell);
-    dockTrigger?.addEventListener("mouseenter", () => setDock(true));
-    dockNav?.addEventListener("mouseenter", () => setDock(true));
-    dockNav?.addEventListener("mouseleave", () => { if(!dockPinned) setDock(false); });
+    dockTrigger?.addEventListener("mouseenter", () => document.body.classList.add("smriti-dock-open"));
+    dockNav?.addEventListener("mouseenter", () => document.body.classList.add("smriti-dock-open"));
+    dockNav?.addEventListener("mouseleave", () => { if(!dockPinned) document.body.classList.remove("smriti-dock-open"); });
     const searchTrigger = $("#smriti-search-trigger");
-    searchTrigger?.addEventListener("mouseenter", () => setSearch(true));
-    search?.addEventListener("mouseleave", () => { if(!searchPinned) setSearch(false); });
-    searchTrigger?.addEventListener("mouseleave", () => { if(!searchPinned) setSearch(false); });
+    searchTrigger?.addEventListener("mouseenter", () => document.body.classList.add("smriti-search-open"));
+    search?.addEventListener("mouseleave", () => { if(!searchPinned) document.body.classList.remove("smriti-search-open"); });
+    searchTrigger?.addEventListener("mouseleave", () => { if(!searchPinned) document.body.classList.remove("smriti-search-open"); });
     const menu = button("Open app launcher","smriti-menu-button","smriti-launcher-menu"); menu.textContent = "▦ Menu";
     if (dockNav) dockNav.append(menu); else {
       menu.style.position="fixed"; menu.style.bottom="14px"; menu.style.left="50%"; menu.style.zIndex="140"; menu.style.transform="translateX(-50%)"; document.body.append(menu);
