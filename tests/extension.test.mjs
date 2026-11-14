@@ -263,6 +263,12 @@ describe("extension compatibility contracts", () => {
     assert.ok(clock.includes("weekday: \"long\""), "Clock should show the full date");
     assert.ok(clock.includes(":hover .smrititab-clock-content"), "Clock should reveal on hover");
     assert.ok(clock.includes("hover: none"), "Touch devices should support tap-to-toggle");
+    assert.ok(clock.includes("DOMContentLoaded"), "Clock should initialize after the document is ready");
+    assert.ok(clock.includes("z-index: 10000"), "Clock box should stay above the dashboard");
+    assert.ok(clock.includes("border: 1px solid rgba(249, 115, 22"), "Clock should have an orange outlined box");
+    assert.ok(clock.includes("font: 800"), "Clock typography should be bold");
+    assert.ok(clock.includes("-webkit-text-stroke"), "Clock typography should have an orange stroke");
+    assert.ok(clock.includes("background: rgba(15, 23, 42"), "Clock should sit inside a translucent box");
   });
 
 describe("extension verifier", () => {
