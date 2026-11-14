@@ -1,54 +1,153 @@
-name: Extension CI
+name: SmritiTab Build, Package & Live Preview
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: extension-ci-${{ github.ref }}
+  group: smrititab-release-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: Test and package extension
+  build:
+    name: Build Chrome extension and preview
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
+    timeout-minutes: 15
     steps:
-      - name: Check out repository
+      - name: Check out OG extension (main)
         uses: actions/checkout@v4
+        with:
+          path: og
+
+      - name: Check out wallpaper-first UI (Raw)
+        uses: actions/checkout@v4
+        with:
+          ref: Raw
+          path: raw
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            og/package-lock.json
+            raw/package-lock.json
 
-      - name: Install dependencies
+      - name: Test original extension foundation
+        working-directory: og
+        run: |
+          npm ci
+          npm test
+          npm run verify
+
+      - name: Install Raw UI dependencies
+        working-directory: raw
         run: npm ci
 
-      - name: Run automated tests
-        run: npm test
+      - name: Build Raw UI as MV3-compatible external assets
+        working-directory: raw
+        run: |
+          cat > vite.extension.config.mjs <<'EOF'
+          import path from "node:path";
+          import { fileURLToPath } from "node:url";
+          import tailwindcss from "@tailwindcss/vite";
+          import react from "@vitejs/plugin-react";
+          import { defineConfig } from "vite";
 
-      - name: Verify repository runtime
-        run: npm run verify
+          const root = path.dirname(fileURLToPath(import.meta.url));
+          export default defineConfig({
+            base: "./",
+            plugins: [react(), tailwindcss()],
+            resolve: { alias: { "@": path.resolve(root, "src") } },
+            build: {
+              outDir: "dist",
+              emptyOutDir: true,
+              assetsDir: "assets",
+              sourcemap: false,
+            },
+          });
+          EOF
+          npm run build -- --config vite.extension.config.mjs
 
-      - name: Build unpacked extension package
-        run: npm run build
+      - name: Assemble extension using OG manifest and service worker
+        run: |
+          set -euo pipefail
+          cp og/manifest.json raw/dist/manifest.json
+          mkdir -p raw/dist/background
+          cp og/background/service-worker.js raw/dist/background/service-worker.js
+          node --input-type=module <<'EOF'
+          import fs from "node:fs";
+          import path from "node:path";
+          const root = "raw/dist";
+          const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.json"), "utf8"));
+          if (manifest.manifest_version !== 3) throw new Error("Expected Manifest V3");
+          if (manifest.chrome_url_overrides?.newtab !== "index.html") throw new Error("New Tab override missing");
+          if (!fs.existsSync(path.join(root, manifest.background.service_worker))) throw new Error("Service worker missing");
+          const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+          if (/<script(?![^>]*\\bsrc=)[^>]*>/i.test(html)) throw new Error("Inline script blocked by MV3 CSP");
+          const refs = [...html.matchAll(/(?:src|href)=["']([^"']+)["']/g)].map(m => m[1]);
+          for (const ref of refs) {
+            if (/^(https?:|data:|#)/i.test(ref)) continue;
+            const file = path.resolve(root, ref);
+            if (!file.startsWith(path.resolve(root) + path.sep) || !fs.existsSync(file)) {
+              throw new Error("Missing or unsafe built asset: " + ref);
+            }
+          }
+          console.log("MV3 package structure and local HTML assets verified.");
+          EOF
+          node --check raw/dist/background/service-worker.js
+          test -s raw/dist/index.html
+          test -s raw/dist/manifest.json
 
-      - name: Verify generated package
-        run: npm run verify:dist
+      - name: Create installable ZIP
+        run: |
+          cd raw/dist
+          zip -qr ../../smrititab-chrome-extension.zip .
+          cd ../..
+          test -s smrititab-chrome-extension.zip
 
-      - name: Upload unpacked extension artifact
+      - name: Upload Chrome extension ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: smrititab-extension
-          path: dist/
+          name: smrititab-chrome-extension
+          path: smrititab-chrome-extension.zip
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 30
+
+      - name: Upload unpacked extension folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: smrititab-unpacked-extension
+          path: raw/dist/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload live preview
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: raw/dist/
+
+      - name: Deploy live preview
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Print live preview URL
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: echo "Live preview deployed to ${{ steps.deployment.outputs.page_url }}"
