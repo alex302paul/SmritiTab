@@ -154,14 +154,14 @@ describe("extension compatibility contracts", () => {
 
   it("sizes category cards to content and bounds long lists with responsive scrolling", () => {
     const css = fs.readFileSync(path.join(projectRoot, "assets", "cards-sticky.css"), "utf8");
-    assert.match(css, /grid-cols-2\\\\\.gap-1/);
-    assert.match(css, /height:\\s*auto\\s*!important/);
-    assert.match(css, /max-height:\\s*300px/);
-    assert.match(css, /flex:\\s*0 1 auto\\s*!important/);
-    assert.match(css, /resize:\\s*both/);
-    assert.match(css, /align-items:\\s*start/);
-    assert.match(css, /max-width:\\s*640px/);
-    assert.match(css, /scrollbar-color:\\s*rgba\\(249, 115, 22/);
+    assert.match(css, /grid-cols-2\.gap-1/);
+    assert.match(css, /height:\s*auto\s*!important/);
+    assert.match(css, /max-height:\s*300px/);
+    assert.match(css, /flex:\s*0 1 auto\s*!important/);
+    assert.match(css, /resize:\s*both/);
+    assert.match(css, /align-items:\s*start/);
+    assert.match(css, /max-width:\s*640px/);
+    assert.match(css, /scrollbar-color:\s*rgba\(249, 115, 22/);
   });
 
   it("keeps keyboard focus visible with the orange accent and supports forced colors", () => {
