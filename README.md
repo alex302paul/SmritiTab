@@ -84,3 +84,33 @@ Location is used to request weather coordinates from Open-Meteo. Review browser 
 ## License
 
 No license file is currently included. Add an explicit license before accepting external contributions.
+
+## Wallpaper-first build, live preview and Chrome ZIP
+
+The `SmritiTab Build, Package & Live Preview` GitHub Actions workflow uses:
+- `main` for the original Manifest V3 manifest, permissions and service worker.
+- `Raw` for the wallpaper-first React interface.
+- The shared `smrititab:v1` Chrome storage namespace for existing Quick Links and settings.
+
+On every push to `main` (and on manual dispatch), it tests the OG extension foundation, builds the Raw interface as external JS/CSS assets (no MV3-blocked inline script), assembles the extension, and uploads:
+- `smrititab-chrome-extension`: installable ZIP.
+- `smrititab-unpacked-extension`: unpacked extension directory.
+
+For the live preview, GitHub Pages is deployed from the same built UI. The preview is a website; it does not install or replace Chrome's New Tab extension.
+
+### Download and install the extension
+
+1. Open the repository's **Actions** tab.
+2. Open the latest successful **SmritiTab Build, Package & Live Preview** run on `main`.
+3. Under **Artifacts**, download `smrititab-chrome-extension`.
+4. Extract the ZIP to a normal folder.
+5. Open `chrome://extensions` in Chrome and enable **Developer mode**.
+6. Click **Load unpacked** and select the extracted folder containing `manifest.json`.
+7. If another SmritiTab build is already installed, back up its data first; install/test the new build and verify Quick Links before removing the old copy.
+
+To refresh the extension after a later build, download and extract the new ZIP to a new folder, then use **Reload** on the extension's card in `chrome://extensions` after selecting the new unpacked folder (or remove the previous unpacked entry and load the new folder). Chrome Web Store publishing is a separate process and is not performed by this workflow.
+
+### Live preview
+
+After a successful run on `main`, open the **Deployments** section of the repository or the Pages URL printed in the workflow log. If Pages has never been enabled for the repository, the workflow attempts to enable the GitHub Actions Pages source automatically. A Pages deployment is not the installable extension package.
+
