@@ -125,6 +125,7 @@ describe("extension compatibility contracts", () => {
   it("keeps Chrome permissions required by implemented dashboard features", () => {
     const manifest = JSON.parse(fs.readFileSync(path.join(projectRoot, "manifest.json"), "utf8"));
     const permissions = new Set(manifest.permissions || []);
+    assert.ok(manifest.host_permissions?.includes("https://cdn.rapidfile.cc/*"), "Missing Rapidfile CDN host permission");
     for (const permission of [
       "storage", "bookmarks", "history", "tabs",
       "tabGroups", "contextMenus", "clipboardRead", "clipboardWrite",
