@@ -139,6 +139,7 @@ describe("extension compatibility contracts", () => {
     assert.equal(urls.length, 1217, "Expected all 1,217 Rapidfile wallpapers to be embedded");
     assert.equal(new Set(urls).size, 1217, "Rapidfile wallpaper URLs must be unique");
     assert.ok(bundle.includes("smrititab:last-wallpaper-id"));
+    assert.ok(bundle.includes("function rr(){return sr.find(r=>r.id===cy)??fy[0]"), "Keep the original Unsplash fallback");
   });
 
   it("preserves the current persisted data namespace and keys", () => {
