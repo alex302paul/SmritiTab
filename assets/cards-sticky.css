@@ -174,5 +174,5 @@ button.group.flex.items-center.gap-2:hover {
 
 
 /* JS masonry packing fills vertical gaps without constraining native resize. */
-.smriti-masonry { display: block !important; position: relative !important; width: 100%; gap: 0 !important; min-height: 0; }
-.smriti-masonry > article.smriti-masonry-card { position: absolute !important; inset: auto !important; margin: 0 !important; flex: none !important; resize: both; overflow: auto !important; max-width: 100%; }
+#root .smriti-masonry { display: block !important; position: relative !important; width: 100%; gap: 0 !important; min-height: 0; }
+#root .smriti-masonry > article.smriti-masonry-card { position: absolute !important; inset: auto !important; margin: 0 !important; flex: none !important; resize: both; overflow: auto !important; max-width: 100%; }
