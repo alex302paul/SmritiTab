@@ -159,6 +159,27 @@ describe("extension compatibility contracts", () => {
     }
   });
 
+  it("ships the Raw wallpaper-first UI alongside the OG compatibility runtime", () => {
+    const raw = fs.readFileSync(path.join(projectRoot, "assets", "index-Dovv645t.js"), "utf8");
+    const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+    assert.ok(html.includes("./assets/index-Dovv645t.js"), "The Raw UI bundle must be the active new-tab entry point");
+    assert.ok(html.includes("./assets/index-BpZImi0k.css"), "The Raw UI stylesheet must be loaded");
+    assert.ok(raw.includes("smrititab:v1"), "The Raw UI must retain the established storage namespace");
+    for (const marker of [
+      "cat_work", "cat_daily", "local-bookmarks", "local-history",
+      "Google Apps", "AI Apps", "Social Media",
+      "app_gmail", "app_calendar", "app_github", "app_drive",
+      "app_reddit", "app_youtube", "app_chatgpt", "app_perplexity",
+      "Notes", "Tasks", "Calculator", "Bookmarks", "History", "Clipboard",
+    ]) {
+      assert.ok(raw.includes(marker), `Raw UI is missing expected feature marker: ${marker}`);
+    }
+    assert.ok(raw.includes("showClockWidget:!1,showWeatherWidget:!1,showQuoteWidget:!1"),
+      "New installs should start without clock, weather, or quote widgets");
+    assert.ok(fs.existsSync(path.join(projectRoot, "assets", "dashboard.bundle.js")),
+      "Keep the OG runtime bundle for compatibility and regression coverage");
+  });
+
   it("loads the card layout overrides after the generated dashboard styles", () => {
     const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
     assert.ok(html.indexOf("./assets/dashboard.bundle.css") < html.indexOf("./assets/accessibility.css"));
