@@ -21,6 +21,9 @@ jobs:
     name: Build wallpaper-first UI preview and verify OG compatibility
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out OG extension (main)
         uses: actions/checkout@v4
