@@ -16,7 +16,7 @@ Error generating stack: `+a.message+`
    s.jsx("span",{className:"text-[10px] text-slate-400",children:"16 categories · curated links"})
   ]}),
   s.jsx("div",{className:"grid w-full grid-cols-2 gap-1.5 sm:grid-cols-4",children:groups.map((group,index)=>s.jsxs("article",{
-   className:"flex h-16 w-full min-w-0 flex-col overflow-hidden rounded-lg border border-slate-900/10 bg-white/65 p-1 shadow-sm transition hover:border-orange-400/50 hover:shadow-md dark:border-white/10 dark:bg-white/[0.06]",
+   className:"flex h-40 w-full min-w-0 flex-col overflow-hidden rounded-lg border border-slate-900/10 bg-white/65 p-1 shadow-sm transition hover:border-orange-400/50 hover:shadow-md dark:border-white/10 dark:bg-white/[0.06]",
    children:[
     s.jsxs("header",{className:"mb-0.5 flex shrink-0 items-center gap-1 border-b border-slate-900/5 pb-0.5 dark:border-white/10",children:[
      s.jsx("span",{className:"grid h-4 w-4 shrink-0 place-items-center rounded-md bg-orange-500/10 text-[9px] font-bold text-orange-600 dark:text-orange-300",children:String(index+1).padStart(2,"0")}),
