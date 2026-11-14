@@ -180,6 +180,29 @@ describe("extension compatibility contracts", () => {
       "Keep the OG runtime bundle for compatibility and regression coverage");
   });
 
+  it("loads the user's Quick Links categories and Rapidfile wallpaper catalog", () => {
+    const seed = fs.readFileSync(path.join(projectRoot, "assets", "quick-links-seed.js"), "utf8");
+    const wallpapers = fs.readFileSync(path.join(projectRoot, "assets", "rapidfile-wallpapers.js"), "utf8");
+    const bundle = fs.readFileSync(path.join(projectRoot, "assets", "index-Dovv645t.js"), "utf8");
+    const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+    assert.ok(html.indexOf("rapidfile-wallpapers.js") < html.indexOf("index-Dovv645t.js"), "Wallpaper catalog must load before the app bundle");
+    assert.ok(html.indexOf("quick-links-seed.js") < html.indexOf("index-Dovv645t.js"), "Quick Links seed must load before the app bundle");
+    for (const category of [
+      "AP's Favorites", "Free Porn Sites", "Photo Galleries", "TikTok / Short Porn",
+      "Virtual Reality", "Live Cams", "Free OnlyFans Accounts", "Free OnlyFans Porn Sites",
+      "AI Chat Platforms", "AI Porn Generators", "Adult Forums", "Amateur & Creator Sites",
+      "Dating", "Fetish & Niche", "Hentai / Cartoon / Anime",
+      "Reddit NSFW Style / Aggregators", "Celebrity", "Adult Games",
+    ]) assert.ok(seed.includes(category), `Quick Links seed missing category: ${category}`);
+    assert.ok(seed.includes("https://hqporner.com/"), "AP's Favorites links must be seeded");
+    assert.ok(seed.includes("https://www.pornhub.com"), "Free-site links must be seeded");
+    assert.ok(seed.includes("quick-links-seed-version"), "The seed migration must be versioned");
+    assert.ok(wallpapers.includes("cdn.rapidfile.cc"), "Rapidfile CDN links must be bundled");
+    assert.ok((wallpapers.match(/cdn\\.rapidfile\\.cc/g) || []).length > 1000, "The full wallpaper list should be bundled");
+    assert.ok(bundle.includes("window.__SMRITI_RAPIDFILE_WALLPAPERS__"), "The wallpaper hook must use the Rapidfile catalog");
+    assert.ok(bundle.includes("window.__SMRITI_QUICK_LINKS_SEED__"), "The app must load the user Quick Links seed");
+  });
+
   it("loads the card layout overrides after the generated dashboard styles", () => {
     const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
     assert.ok(html.indexOf("./assets/dashboard.bundle.css") < html.indexOf("./assets/accessibility.css"));
