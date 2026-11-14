@@ -116,16 +116,16 @@ jobs:
           enablement: true
 
       - name: Upload live preview
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Raw')
         uses: actions/upload-pages-artifact@v3
         with:
           path: raw/dist/
 
       - name: Deploy live preview
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Raw')
         id: deployment
         uses: actions/deploy-pages@v4
 
       - name: Print live preview URL
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Raw')
         run: echo "Live preview deployed to ${{ steps.deployment.outputs.page_url }}"
