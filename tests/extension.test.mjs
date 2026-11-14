@@ -252,6 +252,19 @@ describe("extension compatibility contracts", () => {
   });
 });
 
+  it("loads the centered hover clock as a separate wallpaper-first overlay", () => {
+    const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+    const clock = fs.readFileSync(path.join(projectRoot, "assets", "hover-clock.js"), "utf8");
+    assert.ok(html.indexOf("index-Dovv645t.js") < html.indexOf("hover-clock.js"), "Clock overlay should load after the dashboard bundle");
+    assert.ok(clock.includes('inset: 50% auto auto 50%'), "Clock should be centered in the viewport");
+    assert.ok(clock.includes("hour12: true"), "Clock should use 12-hour AM/PM time");
+    assert.ok(clock.includes("second: \"2-digit\""), "Clock should include seconds");
+    assert.ok(clock.includes("Good Morning!"), "Clock should include time-based greetings");
+    assert.ok(clock.includes("weekday: \"long\""), "Clock should show the full date");
+    assert.ok(clock.includes(":hover .smrititab-clock-content"), "Clock should reveal on hover");
+    assert.ok(clock.includes("hover: none"), "Touch devices should support tap-to-toggle");
+  });
+
 describe("extension verifier", () => {
   it("accepts the checked-in extension runtime", () => {
     const result = spawnSync(process.execPath, [verifierPath, projectRoot], { encoding: "utf8" });
