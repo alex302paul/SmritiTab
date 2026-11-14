@@ -25,7 +25,8 @@
     "https://geocoding-api.open-meteo.com/*",
     "https://images.unsplash.com/*",
     "https://fonts.googleapis.com/*",
-    "https://fonts.gstatic.com/*"
+    "https://fonts.gstatic.com/*",
+    "https://cdn.rapidfile.cc/*"
   ],
   "commands": {
     "open-search": {
