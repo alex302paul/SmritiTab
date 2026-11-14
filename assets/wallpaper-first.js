@@ -138,10 +138,10 @@
   document.addEventListener("pointermove", e => {
     if (e.pointerType === "touch" || activeOverlay) return;
     const w=window.innerWidth,h=window.innerHeight;
-    document.body.classList.toggle("smriti-edge-left", e.clientX < 12 && e.clientY > h*.32 && e.clientY < h*.68);
-    document.body.classList.toggle("smriti-edge-bottom", e.clientY > h-10 && e.clientX > w*.35 && e.clientX < w*.65);
-    document.body.classList.toggle("smriti-edge-top", e.clientY < 10 && e.clientX > w*.35 && e.clientX < w*.65);
-    document.body.classList.toggle("smriti-edge-right", e.clientX > w-10 && e.clientY > h*.32 && e.clientY < h*.68);
+    document.body.classList.toggle("smriti-edge-left", e.clientX < 64 && e.clientY > h*.32 && e.clientY < h*.68);
+    document.body.classList.toggle("smriti-edge-bottom", e.clientY > h-36 && e.clientX > w*.35 && e.clientX < w*.65);
+    document.body.classList.toggle("smriti-edge-top", e.clientY < 36 && e.clientX > w*.35 && e.clientX < w*.65);
+    document.body.classList.toggle("smriti-edge-right", e.clientX > w-64 && e.clientY > h*.32 && e.clientY < h*.68);
     [["left","#smriti-quick-trigger"],["bottom","#smriti-dock-trigger"],["top","#smriti-search-trigger"],["right","#smriti-settings-trigger"]].forEach(([edge,sel])=>$(sel)?.classList.toggle("is-visible",document.body.classList.contains("smriti-edge-"+edge)));
     $("#smriti-right-controls")?.classList.toggle("is-visible",document.body.classList.contains("smriti-edge-right"));
     if (!document.body.classList.contains("smriti-edge-bottom") && !dockPinned && !dock?.matches(":hover")) setDock(false);
