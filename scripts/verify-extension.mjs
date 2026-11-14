@@ -25,7 +25,7 @@ function resolveLocal(value, sourceFile) {
   if (!value || typeof value !== "string" || /^[a-z]+:/i.test(value) || value.startsWith("//")) return null;
   return path.posix.normalize(path.posix.join(path.posix.dirname(sourceFile), value.split(/[?#]/, 1)[0]));
 }
-for (const file of ["manifest.json","index.html","background/service-worker.js","assets/index-Dovv645t.js","assets/index-BpZImi0k.css","assets/accessibility.css","assets/dashboard.bundle.js","assets/dashboard.bundle.css","assets/cards-sticky.css","assets/widgets-redesign.css"]) requireFile(file);
+for (const file of ["manifest.json","index.html","background/service-worker.js","assets/index-Dovv645t.js","assets/index-BpZImi0k.css","assets/accessibility.css","assets/rapidfile-wallpapers.js","assets/quick-links-seed.js","assets/dashboard.bundle.js","assets/dashboard.bundle.css","assets/cards-sticky.css","assets/widgets-redesign.css"]) requireFile(file);
 let manifest;
 try { manifest = JSON.parse(fs.readFileSync(path.join(root,"manifest.json"),"utf8")); }
 catch (error) { fail(`manifest.json is invalid JSON: ${error.message}`); }
@@ -46,6 +46,8 @@ if (fs.existsSync(htmlPath)) {
   if (!html.includes('id="root"')) fail('index.html must include the dashboard mount element with id="root".');
   if (!html.includes("./assets/index-Dovv645t.js")) fail("index.html must load the Raw dashboard bundle.");
   if (!html.includes("./assets/index-BpZImi0k.css")) fail("index.html must load the Raw dashboard stylesheet.");
+  if (!html.includes("./assets/rapidfile-wallpapers.js")) fail("index.html must load the Rapidfile wallpaper catalog.");
+  if (!html.includes("./assets/quick-links-seed.js")) fail("index.html must load the user Quick Links seed.");
   const refs = [...html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/g)];
   for (const [,reference] of refs) {
     const resolved = resolveLocal(reference,"index.html");
