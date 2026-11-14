@@ -1,34 +1,44 @@
 /* ============================================================
-   SmritiTab — Sticky-note style home cards + compact lists
-   Updated:
-   - Cards with few links can shrink (no forced tall empty space)
-   - Overall card height slightly increased
-   - Lists still show ~8–10 items then scroll
+   SmritiTab — Dynamic height sticky cards + manual resize
+   - Few links  → short card
+   - Many links → taller (max ~8–10 items) then scroll
+   - User can drag bottom-right corner to resize
    ============================================================ */
 
-/* ---------- 1. Home cards grid ---------- */
-
+/* ---------- 1. Home grid – more flexible ---------- */
 .grid.min-h-\[260px\].flex-1.grid-cols-5 {
   min-height: 0 !important;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   gap: 12px !important;
   padding: 12px !important;
   align-content: start !important;
+  align-items: start !important; /* cards top-align, different heights look natural */
 }
 
-/* Floating / window-style cards — slightly taller feel */
+/* ---------- 2. Floating cards – content driven + resizable ---------- */
+
+/* Main window-style cards */
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
   border-radius: 14px !important;
-  min-height: 180px !important;          /* thodi height badhai */
+  min-height: 0 !important;                 /* allow very short cards */
+  max-height: 380px !important;             /* hard cap so they never become huge */
+  height: auto !important;
+  resize: both !important;                  /* ← user can drag bottom-right corner */
+  overflow: auto !important;                /* required for resize to work */
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.08),
     0 12px 28px -8px rgb(0 0 0 / 0.18),
     0 0 0 1px rgb(255 255 255 / 0.06) !important;
 }
 
-/* Hover lift */
+/* Optional: make resize handle more visible (subtle) */
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-resizer {
+  background: linear-gradient(135deg, transparent 50%, rgba(249, 115, 22, 0.45) 50%);
+  border-radius: 0 0 12px 0;
+}
+
+/* Hover polish */
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl:hover {
-  transform: translateY(-2px) !important;
   box-shadow:
     0 8px 16px -4px rgb(0 0 0 / 0.12),
     0 20px 40px -12px rgb(0 0 0 / 0.22),
@@ -36,36 +46,37 @@
   border-color: rgba(249, 115, 22, 0.25) !important;
 }
 
-/* ---------- 2. List area — max height only (shrinks when few items) ---------- */
+/* ---------- 3. Lists inside cards – grow with content, then scroll ---------- */
 
-/* Important: only max-height, no min-height on the list itself.
-   This lets cards with 2–5 links stay short. */
+/* Key: only max-height, no forced min-height */
 .scroll-thin.min-h-0.flex-1.overflow-y-auto,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-2,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-3,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-4,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.px-2.pb-2,
 .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
-  max-height: 310px !important;   /* ~8–10 items, thodi height badhai */
-  min-height: 0 !important;       /* allow shrink when few items */
+  max-height: 300px !important;   /* ~8–10 links */
+  min-height: 0 !important;       /* shrink when few links */
+  height: auto !important;
   overflow-y: auto !important;
   overscroll-behavior: contain;
+  flex: 1 1 auto !important;
 }
 
-/* Existing max-h-64 grids */
+/* Grid style lists (favorites icons etc.) */
 .scroll-thin.grid.max-h-64 {
-  max-height: 320px !important;
+  max-height: 300px !important;
   min-height: 0 !important;
+  height: auto !important;
 }
 
 .scroll-thin.grid.max-h-64.grid-cols-3,
 .scroll-thin.grid.max-h-64.grid-cols-3.gap-2 {
-  max-height: 320px !important;
+  max-height: 300px !important;
   gap: 6px !important;
 }
 
-/* ---------- 3. Scrollbar polish ---------- */
-
+/* ---------- 4. Scrollbar ---------- */
 .scroll-thin {
   scrollbar-width: thin;
   scrollbar-color: rgba(249, 115, 22, 0.55) transparent;
@@ -85,21 +96,18 @@
   background: rgba(249, 115, 22, 0.8);
 }
 
-/* ---------- 4. Subtle sticky-note edge ---------- */
-
+/* ---------- 5. Visual polish ---------- */
 .glass-panel,
 .glass-panel-strong {
   border: 1px solid rgba(148, 163, 184, 0.22) !important;
 }
 
-/* Orange hover on list items */
 .group.flex.items-center.gap-2:hover,
 button.group.flex.items-center.gap-2:hover {
   background-color: rgba(249, 115, 22, 0.08) !important;
 }
 
-/* ---------- 5. Mobile ---------- */
-
+/* ---------- 6. Mobile ---------- */
 @media (max-width: 900px) {
   .grid.min-h-\[260px\].flex-1.grid-cols-5 {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -108,11 +116,11 @@ button.group.flex.items-center.gap-2:hover {
 
   .scroll-thin.min-h-0.flex-1.overflow-y-auto,
   .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
-    max-height: 280px !important;
+    max-height: 260px !important;
   }
 
   .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
-    min-height: 160px !important;
+    max-height: 340px !important;
   }
 }
 
@@ -125,19 +133,18 @@ button.group.flex.items-center.gap-2:hover {
 
   .scroll-thin.min-h-0.flex-1.overflow-y-auto,
   .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
-    max-height: 250px !important;
+    max-height: 230px !important;
   }
 
   .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
-    min-height: 150px !important;
+    max-height: 300px !important;
+    /* resize on very small screens can be annoying, optional disable: */
+    /* resize: none !important; */
   }
 }
 
-/* ---------- 6. Reduced motion ---------- */
+/* ---------- 7. Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
-    transition: none !important;
-  }
   .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl:hover {
     transform: none !important;
   }
