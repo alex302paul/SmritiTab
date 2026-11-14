@@ -133,6 +133,19 @@ describe("extension compatibility contracts", () => {
     }
   });
 
+  it("packages the Rapidfile wallpaper list and rotates random wallpapers between refreshes", () => {
+    const bundle = fs.readFileSync(path.join(projectRoot, "assets", "dashboard.bundle.js"), "utf8");
+    const listPath = path.join(projectRoot, "docs", "rapidfile_cdn_links.txt");
+    const wallpaperUrls = fs.readFileSync(listPath, "utf8").trim().split(/\\r?\\n/);
+    const buildScript = fs.readFileSync(path.join(projectRoot, "scripts", "build-extension.mjs"), "utf8");
+
+    assert.equal(wallpaperUrls.length, 1217);
+    assert.ok(wallpaperUrls.every((url) => /^https:\\/\\/cdn\\.rapidfile\\.cc\\/[A-Za-z0-9]+\\/\\(\\d+\\)\\.jpg$/.test(url)));
+    assert.ok(buildScript.includes('"docs"'), "The package must include the docs wallpaper list");
+    assert.ok(bundle.includes("docs/rapidfile_cdn_links.txt"));
+    assert.match(bundle, /R\\.current=hy\\(await ly\\(\\),py\\(\\)\\)/);
+  });
+
   it("preserves the current persisted data namespace and keys", () => {
     const bundle = fs.readFileSync(path.join(projectRoot, "assets", "dashboard.bundle.js"), "utf8");
     assert.ok(bundle.includes("smrititab:v1"));
