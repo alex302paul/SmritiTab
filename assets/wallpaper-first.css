@@ -6,7 +6,8 @@ html, body, #root { width: 100%; min-height: 100%; overflow: hidden !important; 
 .smriti-wallpaper-shell > header,
 .smriti-wallpaper-shell > div.absolute.inset-x-0.top-0.z-40 { display: none !important; }
 .smriti-wallpaper-shell > main { min-height: 100dvh !important; padding: 0 !important; overflow: hidden !important; }
-.smriti-wallpaper-shell > main > .smriti-widget-row { display: none !important; }
+.smriti-wallpaper-shell > main > .smriti-widget-row,
+.smriti-wallpaper-shell > main > div:last-child { display: none !important; }
 .smriti-wallpaper-shell form[role="search"] {
   position: fixed !important; z-index: 120 !important; top: 18px !important; left: 50% !important;
   width: min( min(92vw, 680px), 680px) !important; transform: translate(-50%, -18px) !important;
