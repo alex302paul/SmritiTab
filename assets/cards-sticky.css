@@ -1,27 +1,30 @@
 /* SmritiTab category cards: independently sized, sticky-note-style tiles. */
 
-/* Replace the rigid 2/4-column grid with wrapping, independently sized tiles. */
-.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 {
-  display: flex !important;
-  flex-flow: row wrap !important;
-  align-items: flex-start !important;
-  align-content: flex-start !important;
-  justify-content: flex-start;
-  gap: 8px !important;
+/* Masonry-style flow: responsive columns, with no fixed row or column count. */
+.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 {
+  display: block !important;
+  column-width: 220px;
+  column-gap: 8px !important;
+  column-count: auto !important;
+  column-fill: balance;
 }
 
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
   box-sizing: border-box;
-  display: flex;
-  flex: 0 0 auto !important;
+  display: inline-flex;
+  flex: none !important;
   flex-direction: column;
-  width: 220px;
+  width: 100%;
   height: auto !important;
   min-width: 150px;
   min-height: 105px;
   max-width: 100%;
   max-height: 380px !important;
   align-self: flex-start !important;
+  vertical-align: top;
+  margin: 0 0 8px;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
   resize: both;
   overflow: auto !important; /* required for the native resize grip */
   scrollbar-width: thin;
