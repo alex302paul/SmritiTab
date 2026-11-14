@@ -1,21 +1,29 @@
-/* SmritiTab card layout: content-sized cards, bounded lists and manual resize. */
+/* SmritiTab category cards: independently sized, sticky-note-style tiles. */
 
-/* Adult Links category grid (actual runtime classes: grid-cols-2 sm:grid-cols-4). */
+/* Replace the rigid 2/4-column grid with wrapping, independently sized tiles. */
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 {
-  align-items: start !important;
-  align-content: start !important;
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+  justify-content: flex-start;
+  gap: 8px !important;
 }
 
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
   box-sizing: border-box;
-  height: auto !important; /* overrides the runtime h-40 fixed height */
-  min-height: 0 !important;
-  max-height: 360px !important;
-  min-width: 0;
+  display: flex;
+  flex: 0 0 auto !important;
+  flex-direction: column;
+  width: 220px;
+  height: auto !important;
+  min-width: 150px;
+  min-height: 105px;
   max-width: 100%;
-  align-self: start;
+  max-height: 380px !important;
+  align-self: flex-start !important;
   resize: both;
-  overflow: hidden;
+  overflow: auto !important; /* required for the native resize grip */
   scrollbar-width: thin;
   scrollbar-color: rgba(249, 115, 22, 0.55) transparent;
   border-radius: 10px;
@@ -23,16 +31,20 @@
 }
 
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article:hover {
-  border-color: rgba(249, 115, 22, 0.45) !important;
+  border-color: rgba(249, 115, 22, 0.5) !important;
   box-shadow: 0 5px 16px -7px rgba(249, 115, 22, 0.32), 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
-/* The list grows naturally for short categories, then scrolls at 300px. */
+/* Keep each title row fixed; link lists use remaining height and scroll at 300px. */
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > header {
+  flex: 0 0 auto;
+}
+
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
   box-sizing: border-box;
-  flex: 0 1 auto !important;
-  height: auto !important;
+  flex: 1 1 auto !important;
   min-height: 0 !important;
+  height: auto !important;
   max-height: 300px !important;
   overflow-x: hidden;
   overflow-y: auto !important;
@@ -41,7 +53,7 @@
   scrollbar-color: rgba(249, 115, 22, 0.55) transparent;
 }
 
-/* Other scrollable lists: content-sized up to the same limit. */
+/* Other scrollable dashboard lists retain a 300px cap. */
 .scroll-thin.min-h-0.flex-1.overflow-y-auto,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-2,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-3,
@@ -49,9 +61,7 @@
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.px-2.pb-2,
 .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
   box-sizing: border-box;
-  flex: 0 1 auto !important;
   min-height: 0 !important;
-  height: auto !important;
   max-height: 300px !important;
   overflow-y: auto !important;
   overscroll-behavior: contain;
@@ -64,10 +74,11 @@
   min-height: 0 !important;
 }
 
-/* Floating/window cards remain manually resizable, with bounded height. */
+/* Floating/window cards remain independently resizable. */
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
   box-sizing: border-box;
-  min-height: 0 !important;
+  min-width: 150px;
+  min-height: 100px !important;
   max-height: 380px !important;
   height: auto !important;
   resize: both;
@@ -82,7 +93,7 @@
   box-shadow: 0 8px 16px -4px rgb(0 0 0 / 0.12), 0 20px 40px -12px rgb(0 0 0 / 0.22), 0 0 0 1px rgba(249, 115, 22, 0.18) !important;
 }
 
-/* Consistent orange scrollbar in Chromium and Firefox. */
+/* Orange scrollbar and resize-grip polish. */
 .scroll-thin::-webkit-scrollbar,
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar,
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar {
@@ -106,10 +117,10 @@
 .scroll-thin::-webkit-resizer,
 .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-resizer,
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-resizer {
-  background: linear-gradient(135deg, transparent 50%, rgba(249, 115, 22, 0.5) 50%);
+  background: linear-gradient(135deg, transparent 50%, rgba(249, 115, 22, 0.6) 50%);
 }
 
-/* Preserve the orange hover accent on quick-link rows. */
+/* Preserve orange hover feedback on quick-link rows. */
 .group.flex.items-center.gap-2:hover,
 button.group.flex.items-center.gap-2:hover {
   background-color: rgba(249, 115, 22, 0.08) !important;
@@ -117,7 +128,7 @@ button.group.flex.items-center.gap-2:hover {
 
 @media (max-width: 900px) {
   .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
-    max-height: 320px !important;
+    max-height: 340px !important;
   }
 
   .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto,
@@ -132,9 +143,15 @@ button.group.flex.items-center.gap-2:hover {
 }
 
 @media (max-width: 640px) {
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 {
+    gap: 6px !important;
+  }
+
   .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
-    max-height: 290px !important;
-    resize: vertical; /* avoid horizontal overflow on narrow screens */
+    width: min(170px, 100%);
+    min-width: min(135px, 100%);
+    max-height: 300px !important;
+    resize: both;
   }
 
   .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto,
