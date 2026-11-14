@@ -1,8 +1,8 @@
-name: SmritiTab Build, Package & Live Preview
+name: SmritiTab Live UI Preview & Compatibility Checks
 
 on:
   push:
-    branches: [main]
+    branches: [main, Raw]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -25,6 +25,7 @@ jobs:
       - name: Check out OG extension (main)
         uses: actions/checkout@v4
         with:
+          ref: main
           path: og
 
       - name: Check out wallpaper-first UI (Raw)
@@ -108,31 +109,8 @@ jobs:
           test -s raw/dist/index.html
           test -s raw/dist/manifest.json
 
-      - name: Create installable ZIP
-        run: |
-          cd raw/dist
-          zip -qr ../../smrititab-chrome-extension.zip .
-          cd ../..
-          test -s smrititab-chrome-extension.zip
-
-      - name: Upload Chrome extension ZIP
-        uses: actions/upload-artifact@v4
-        with:
-          name: smrititab-chrome-extension
-          path: smrititab-chrome-extension.zip
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Upload unpacked extension folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: smrititab-unpacked-extension
-          path: raw/dist/
-          if-no-files-found: error
-          retention-days: 30
-
       - name: Configure GitHub Pages
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Raw')
         uses: actions/configure-pages@v5
         with:
           enablement: true
