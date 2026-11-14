@@ -154,14 +154,18 @@ describe("extension compatibility contracts", () => {
 
   it("lays out category cards as independently resizable sticky-note tiles", () => {
     const css = fs.readFileSync(path.join(projectRoot, "assets", "cards-sticky.css"), "utf8");
-    assert.match(css, /display:\\s*flex\\s*!important/);
-    assert.match(css, /flex-flow:\\s*row wrap\\s*!important/);
-    assert.match(css, /flex:\\s*0 0 auto\\s*!important/);
-    assert.match(css, /resize:\\s*both/);
-    assert.match(css, /overflow:\\s*auto\\s*!important/);
-    assert.match(css, /max-height:\\s*300px/);
-    assert.match(css, /align-items:\\s*flex-start\\s*!important/);
-    assert.match(css, /scrollbar-color:\\s*rgba\\(249, 115, 22/);
+    for (const rule of [
+      "display: flex !important",
+      "flex-flow: row wrap !important",
+      "flex: 0 0 auto !important",
+      "resize: both",
+      "overflow: auto !important",
+      "max-height: 300px !important",
+      "align-items: flex-start !important",
+      "scrollbar-color: rgba(249, 115, 22",
+    ]) {
+      assert.ok(css.includes(rule), `Missing card layout rule: ${rule}`);
+    }
   });
 
   it("keeps keyboard focus visible with the orange accent and supports forced colors", () => {
