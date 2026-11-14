@@ -196,9 +196,9 @@ describe("extension compatibility contracts", () => {
     ]) assert.ok(seed.includes(category), `Quick Links seed missing category: ${category}`);
     assert.ok(seed.includes("https://hqporner.com/"), "AP's Favorites links must be seeded");
     assert.ok(seed.includes("https://www.pornhub.com"), "Free-site links must be seeded");
-    assert.ok(seed.includes("quick-links-seed-version"), "The seed migration must be versioned");
+    assert.ok(bundle.includes("quick-links-seed-version"), "The seed migration must be versioned");
     assert.ok(wallpapers.includes("cdn.rapidfile.cc"), "Rapidfile CDN links must be bundled");
-    assert.ok((wallpapers.match(/cdn\\.rapidfile\\.cc/g) || []).length > 1000, "The full wallpaper list should be bundled");
+    assert.ok((wallpapers.split("https://cdn.rapidfile.cc/").length - 1) > 1000, "The full wallpaper list should be bundled");
     assert.ok(bundle.includes("window.__SMRITI_RAPIDFILE_WALLPAPERS__"), "The wallpaper hook must use the Rapidfile catalog");
     assert.ok(bundle.includes("window.__SMRITI_QUICK_LINKS_SEED__"), "The app must load the user Quick Links seed");
   });
