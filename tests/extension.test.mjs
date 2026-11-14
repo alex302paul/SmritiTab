@@ -182,6 +182,16 @@ describe("extension compatibility contracts", () => {
     }
   });
 
+  it("loads the wallpaper-first interaction layer after the existing runtime", () => {
+    const html = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+    assert.ok(html.indexOf("dashboard.bundle.js") < html.indexOf("wallpaper-first.js"));
+    assert.ok(html.includes("wallpaper-first.css"));
+    const controller = fs.readFileSync(path.join(projectRoot, "assets", "wallpaper-first.js"), "utf8");
+    for (const marker of ["smriti-quick-trigger", "smriti-dock-trigger", "smriti-search-trigger", "smriti-settings-trigger", "Google Apps", "AI Apps", "Social Media", "Escape"]) {
+      assert.ok(controller.includes(marker), `Missing redesign behavior: ${marker}`);
+    }
+  });
+
   it("keeps keyboard focus visible with the orange accent and supports forced colors", () => {
     const css = fs.readFileSync(path.join(projectRoot, "assets", "accessibility.css"), "utf8");
     assert.match(css, /:focus-visible/);
