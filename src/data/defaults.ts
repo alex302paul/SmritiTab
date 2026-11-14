@@ -1,0 +1,656 @@
+import type {
+  AppLink,
+  BookmarkNode,
+  Category,
+  DockConfig,
+  InternalAppId,
+  LaunchpadGroup,
+  Profile,
+  SearchProvider,
+  Settings,
+  WallpaperEntry,
+  WidgetsState,
+} from "../types/smrititab";
+
+export const DEFAULT_SETTINGS: Settings = {
+  theme: "system",
+  wallpaper: "aurora",
+  wallpaperMode: "random",
+  fixedWallpaperId: "ext-unsplash-01",
+  customWallpaperUrl: "",
+  accent: "violet",
+  searchEngine: "google",
+  openInNewTab: true,
+  temperatureUnit: "c",
+  clock24h: false,
+  clockSeconds: false,
+  showSecondsInClock: false,
+  showGreeting: true,
+  showClockWidget: true,
+  showWeatherWidget: true,
+  showQuoteWidget: true,
+  sidebarCollapsed: false,
+  railVisible: true,
+  dockVisible: true,
+  voiceLanguage: "en-US",
+};
+
+export const DEFAULT_PROFILE: Profile = {
+  name: "Guest",
+  tagline: "Make space for what matters.",
+  email: "",
+};
+
+/**
+ * Preserved verbatim from SmritiTab's core runtime (`Ih` & `Ph`).
+ * IDs (`cat_work`, `cat_daily`, `app_*`) MUST remain intact for compatibility.
+ */
+export const DEFAULT_CATEGORIES: Category[] = [
+  { id: "cat_work", name: "Work", accent: "#6366f1" },
+  { id: "cat_daily", name: "Daily", accent: "#10b981" },
+];
+
+export const DEFAULT_APPS: AppLink[] = [
+  {
+    id: "app_gmail",
+    name: "Gmail",
+    target: "https://mail.google.com",
+    kind: "web",
+    categoryId: "cat_work",
+    iconText: "M",
+  },
+  {
+    id: "app_calendar",
+    name: "Calendar",
+    target: "https://calendar.google.com",
+    kind: "web",
+    categoryId: "cat_work",
+    iconText: "C",
+  },
+  {
+    id: "app_github",
+    name: "GitHub",
+    target: "https://github.com",
+    kind: "web",
+    categoryId: "cat_work",
+    iconText: "G",
+  },
+  {
+    id: "app_drive",
+    name: "Drive",
+    target: "https://drive.google.com",
+    kind: "web",
+    categoryId: "cat_work",
+    iconText: "D",
+  },
+  {
+    id: "app_reddit",
+    name: "Reddit",
+    target: "https://www.reddit.com",
+    kind: "web",
+    categoryId: "cat_daily",
+    iconText: "R",
+  },
+  {
+    id: "app_youtube",
+    name: "YouTube",
+    target: "https://www.youtube.com",
+    kind: "web",
+    categoryId: "cat_daily",
+    iconText: "Y",
+  },
+  {
+    id: "app_chatgpt",
+    name: "ChatGPT",
+    target: "https://chatgpt.com",
+    kind: "web",
+    categoryId: "cat_daily",
+    iconText: "AI",
+  },
+  {
+    id: "app_perplexity",
+    name: "Perplexity",
+    target: "https://www.perplexity.ai",
+    kind: "web",
+    categoryId: "cat_daily",
+    iconText: "P",
+  },
+];
+
+export const DEFAULT_WIDGETS: WidgetsState = {
+  clock: { x: 0.5, y: 0.115, visible: true },
+  weather: { x: 0.13, y: 0.115, visible: true },
+  quote: { x: 0.87, y: 0.115, visible: true },
+};
+
+export const DEFAULT_DOCK: DockConfig = {
+  appIds: ["notes", "todo", "calculator", "bookmarks", "history", "clipboard"],
+  size: "md",
+  position: "bottom",
+  labels: false,
+};
+
+export const INTERNAL_APP_IDS: InternalAppId[] = [
+  "notes",
+  "todo",
+  "calculator",
+  "bookmarks",
+  "history",
+  "clipboard",
+  "favorites",
+  "weather",
+  "settings",
+  "profile",
+];
+
+export const APP_REGISTRY: Record<
+  InternalAppId,
+  { title: string; description: string; accent: string }
+> = {
+  notes: {
+    title: "Notes",
+    description: "Quick scratch pad that saves as you type.",
+    accent: "#f59e0b",
+  },
+  todo: {
+    title: "To-do",
+    description: "Tasks with priorities and due dates.",
+    accent: "#10b981",
+  },
+  calculator: {
+    title: "Calculator",
+    description: "Evaluate expressions with keyboard support.",
+    accent: "#6366f1",
+  },
+  bookmarks: {
+    title: "Bookmarks",
+    description: "Your browser bookmarks, editable in place.",
+    accent: "#f97316",
+  },
+  history: {
+    title: "History",
+    description: "Recently visited pages and links.",
+    accent: "#0ea5e9",
+  },
+  clipboard: {
+    title: "Clipboard",
+    description: "Snippets you copied, kept locally.",
+    accent: "#8b5cf6",
+  },
+  favorites: {
+    title: "Favorites",
+    description: "Pinned links you want one click away.",
+    accent: "#eab308",
+  },
+  weather: {
+    title: "Weather",
+    description: "Current conditions for your city.",
+    accent: "#38bdf8",
+  },
+  settings: {
+    title: "Settings",
+    description: "Appearance, wallpapers, dock and dashboard preferences.",
+    accent: "#64748b",
+  },
+  profile: {
+    title: "Profile",
+    description: "Your name, tagline and personal greeting.",
+    accent: "#ec4899",
+  },
+};
+
+export const SEARCH_PROVIDERS: SearchProvider[] = [
+  {
+    id: "google",
+    label: "Google",
+    urlTemplate: "https://www.google.com/search?q={q}",
+    color: "#4285f4",
+    domain: "google.com",
+    keywords: ["g", "goog"],
+  },
+  {
+    id: "duckduckgo",
+    label: "DuckDuckGo",
+    urlTemplate: "https://duckduckgo.com/?q={q}",
+    color: "#de5833",
+    domain: "duckduckgo.com",
+    keywords: ["ddg", "duck"],
+  },
+  {
+    id: "bing",
+    label: "Bing",
+    urlTemplate: "https://www.bing.com/search?q={q}",
+    color: "#0f7ebf",
+    domain: "bing.com",
+    keywords: ["b"],
+  },
+  {
+    id: "youtube",
+    label: "YouTube",
+    urlTemplate: "https://www.youtube.com/results?search_query={q}",
+    color: "#ff0033",
+    domain: "youtube.com",
+    keywords: ["yt", "video"],
+  },
+  {
+    id: "chatgpt",
+    label: "ChatGPT",
+    urlTemplate: "https://chatgpt.com/?q={q}",
+    color: "#10a37f",
+    domain: "chatgpt.com",
+    keywords: ["ai", "gpt"],
+  },
+  {
+    id: "perplexity",
+    label: "Perplexity",
+    urlTemplate: "https://www.perplexity.ai/search?q={q}",
+    color: "#20808d",
+    domain: "perplexity.ai",
+    keywords: ["ppl", "perplex"],
+  },
+];
+
+export const WALLPAPERS: WallpaperEntry[] = [
+  {
+    id: "ext-unsplash-01",
+    title: "Misty Mountains",
+    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-02",
+    title: "Alpine Lake",
+    src: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-03",
+    title: "Mountain Reflection",
+    src: "https://images.unsplash.com/photo-1501785888041-af3ef2852c3e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-04",
+    title: "Golden Sunrise",
+    src: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-05",
+    title: "Snowy Peaks",
+    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-06",
+    title: "Open Landscape",
+    src: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-07",
+    title: "Ocean Waves",
+    src: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-08",
+    title: "Green Hills",
+    src: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-09",
+    title: "Starry Night",
+    src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-10",
+    title: "Tropical Beach",
+    src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-11",
+    title: "Tropical Leaves",
+    src: "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-12",
+    title: "Wildflower Field",
+    src: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-13",
+    title: "Coastal Sunset",
+    src: "https://images.unsplash.com/photo-1475924156734-496f6cac96ec?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-14",
+    title: "Foggy Forest",
+    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-15",
+    title: "Woodland",
+    src: "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-16",
+    title: "Deep Forest",
+    src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+  {
+    id: "ext-unsplash-17",
+    title: "Nature Valley",
+    src: "https://images.unsplash.com/photo-1497436072909-60f36e1d4b1c?auto=format&fit=crop&w=1920&q=85",
+    source: "external",
+    credit: "Unsplash",
+  },
+];
+
+export const LAUNCHPAD_GROUPS: LaunchpadGroup[] = [
+  {
+    id: "google-apps",
+    title: "Google Apps",
+    subtitle: "Workspace, communication & cloud storage",
+    items: [
+      {
+        id: "lp-gmail",
+        name: "Gmail",
+        mark: "M",
+        url: "https://mail.google.com",
+        accent: "#ea4335",
+        description: "Email & inbox",
+      },
+      {
+        id: "lp-calendar",
+        name: "Calendar",
+        mark: "31",
+        url: "https://calendar.google.com",
+        accent: "#4285f4",
+        description: "Schedule & events",
+      },
+      {
+        id: "lp-drive",
+        name: "Drive",
+        mark: "D",
+        url: "https://drive.google.com",
+        accent: "#0f9d58",
+        description: "Cloud files",
+      },
+      {
+        id: "lp-search",
+        name: "Google Search",
+        mark: "G",
+        url: "https://www.google.com",
+        accent: "#4285f4",
+        description: "Web search",
+      },
+      {
+        id: "lp-docs",
+        name: "Google Docs",
+        mark: "Dc",
+        url: "https://docs.google.com",
+        accent: "#2563eb",
+        description: "Documents",
+      },
+      {
+        id: "lp-sheets",
+        name: "Google Sheets",
+        mark: "Sh",
+        url: "https://sheets.google.com",
+        accent: "#16a34a",
+        description: "Spreadsheets",
+      },
+      {
+        id: "lp-meet",
+        name: "Google Meet",
+        mark: "Mt",
+        url: "https://meet.google.com",
+        accent: "#0d9488",
+        description: "Video meetings",
+      },
+      {
+        id: "lp-photos",
+        name: "Google Photos",
+        mark: "Ph",
+        url: "https://photos.google.com",
+        accent: "#f59e0b",
+        description: "Photo library",
+      },
+      {
+        id: "lp-maps",
+        name: "Google Maps",
+        mark: "Mp",
+        url: "https://maps.google.com",
+        accent: "#22c55e",
+        description: "Navigation",
+      },
+    ],
+  },
+  {
+    id: "ai-apps",
+    title: "AI Apps",
+    subtitle: "Research, coding & reasoning assistants",
+    items: [
+      {
+        id: "lp-chatgpt",
+        name: "ChatGPT",
+        mark: "AI",
+        url: "https://chatgpt.com",
+        accent: "#10a37f",
+        description: "OpenAI assistant",
+      },
+      {
+        id: "lp-perplexity",
+        name: "Perplexity",
+        mark: "Px",
+        url: "https://www.perplexity.ai",
+        accent: "#20808d",
+        description: "Answer engine",
+      },
+      {
+        id: "lp-claude",
+        name: "Claude",
+        mark: "Cl",
+        url: "https://claude.ai",
+        accent: "#d97757",
+        description: "Anthropic AI",
+      },
+      {
+        id: "lp-gemini",
+        name: "Gemini",
+        mark: "Gm",
+        url: "https://gemini.google.com",
+        accent: "#6366f1",
+        description: "Google AI",
+      },
+      {
+        id: "lp-copilot",
+        name: "GitHub Copilot",
+        mark: "Cp",
+        url: "https://github.com/copilot",
+        accent: "#4f46e5",
+        description: "Code assistant",
+      },
+      {
+        id: "lp-notebooklm",
+        name: "NotebookLM",
+        mark: "Nb",
+        url: "https://notebooklm.google.com",
+        accent: "#0284c7",
+        description: "Research notebook",
+      },
+    ],
+  },
+  {
+    id: "social-media",
+    title: "Social Media",
+    subtitle: "Communities, video & messaging",
+    items: [
+      {
+        id: "lp-youtube",
+        name: "YouTube",
+        mark: "YT",
+        url: "https://www.youtube.com",
+        accent: "#ef4444",
+        description: "Video & channels",
+      },
+      {
+        id: "lp-reddit",
+        name: "Reddit",
+        mark: "Rd",
+        url: "https://www.reddit.com",
+        accent: "#f97316",
+        description: "Communities",
+      },
+      {
+        id: "lp-x",
+        name: "X",
+        mark: "X",
+        url: "https://x.com",
+        accent: "#334155",
+        description: "Real-time feed",
+      },
+      {
+        id: "lp-linkedin",
+        name: "LinkedIn",
+        mark: "in",
+        url: "https://www.linkedin.com",
+        accent: "#0a66c2",
+        description: "Professional network",
+      },
+      {
+        id: "lp-github",
+        name: "GitHub",
+        mark: "GH",
+        url: "https://github.com",
+        accent: "#64748b",
+        description: "Code & repos",
+      },
+      {
+        id: "lp-instagram",
+        name: "Instagram",
+        mark: "IG",
+        url: "https://www.instagram.com",
+        accent: "#ec4899",
+        description: "Photos & stories",
+      },
+      {
+        id: "lp-whatsapp",
+        name: "WhatsApp Web",
+        mark: "WA",
+        url: "https://web.whatsapp.com",
+        accent: "#22c55e",
+        description: "Messaging",
+      },
+    ],
+  },
+];
+
+export const QUOTES = [
+  { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+  { text: "A calm mind brings inner strength and self-confidence.", author: "Dalai Lama" },
+  { text: "He who has a why to live can bear almost any how.", author: "Friedrich Nietzsche" },
+  { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+  { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+  { text: "Nothing is worth more than this day.", author: "Johann Wolfgang von Goethe" },
+  { text: "You have power over your mind — not outside events.", author: "Marcus Aurelius" },
+  { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
+  { text: "Wherever you go, go with all your heart.", author: "Confucius" },
+  { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
+  { text: "Order your soul. Reduce your wants.", author: "Augustine" },
+  { text: "Well begun is half done.", author: "Aristotle" },
+  { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+  { text: "Attention is the beginning of devotion.", author: "Mary Oliver" },
+  { text: "Be here now, and the whole world opens up.", author: "Thich Nhat Hanh" },
+];
+
+export const CATEGORY_ACCENTS = [
+  "#6366f1",
+  "#10b981",
+  "#f97316",
+  "#0ea5e9",
+  "#ec4899",
+  "#8b5cf6",
+  "#eab308",
+  "#14b8a6",
+  "#ef4444",
+];
+
+export const DEFAULT_LOCAL_BOOKMARKS: BookmarkNode[] = [
+  {
+    id: "bm_root",
+    title: "Bookmarks",
+    children: [
+      {
+        id: "bm_bar",
+        parentId: "bm_root",
+        title: "Bookmarks Bar",
+        children: [
+          {
+            id: "bm_1",
+            parentId: "bm_bar",
+            title: "GitHub",
+            url: "https://github.com",
+          },
+          {
+            id: "bm_2",
+            parentId: "bm_bar",
+            title: "MDN Web Docs",
+            url: "https://developer.mozilla.org",
+          },
+          {
+            id: "bm_3",
+            parentId: "bm_bar",
+            title: "Tailwind CSS",
+            url: "https://tailwindcss.com",
+          },
+        ],
+      },
+      {
+        id: "bm_reading",
+        parentId: "bm_root",
+        title: "Reading & Research",
+        children: [
+          {
+            id: "bm_4",
+            parentId: "bm_reading",
+            title: "Hacker News",
+            url: "https://news.ycombinator.com",
+          },
+          {
+            id: "bm_5",
+            parentId: "bm_reading",
+            title: "Perplexity AI",
+            url: "https://www.perplexity.ai",
+          },
+        ],
+      },
+    ],
+  },
+];
