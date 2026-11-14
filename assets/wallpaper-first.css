@@ -3,7 +3,8 @@
 html, body, #root { width: 100%; min-height: 100%; overflow: hidden !important; }
 #root > div { min-height: 100dvh; }
 .smriti-wallpaper-shell { height: 100dvh !important; overflow: hidden !important; }
-.smriti-wallpaper-shell > header { display: none !important; }
+.smriti-wallpaper-shell > header,
+.smriti-wallpaper-shell > div.absolute.inset-x-0.top-0.z-40 { display: none !important; }
 .smriti-wallpaper-shell > main { min-height: 100dvh !important; padding: 0 !important; overflow: hidden !important; }
 .smriti-wallpaper-shell > main > .smriti-widget-row,
 .smriti-wallpaper-shell > main > div:last-child { display: none !important; }
@@ -32,7 +33,8 @@ body.smriti-dock-open .smriti-wallpaper-shell nav[aria-label="Dock"] {
   opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .2s ease;
   cursor: pointer;
 }
-.smriti-edge-trigger.is-visible { opacity: 1; pointer-events: auto; }
+.smriti-edge-trigger.is-visible,
+.smriti-edge-trigger:hover { opacity: 1; pointer-events: auto; }
 #smriti-quick-trigger { left: 0; top: 50%; transform: translate(-12px,-50%); width: 46px; height: 104px; border-radius: 0 18px 18px 0; }
 #smriti-quick-trigger.is-visible { transform: translate(0,-50%); }
 #smriti-dock-trigger { left: 50%; bottom: 0; transform: translate(-50%,12px); width: 116px; height: 24px; border-radius: 14px 14px 0 0; }
@@ -100,3 +102,10 @@ body.smriti-overlay-open #smriti-settings-trigger { display: none !important; }
 #smriti-right-controls { position: fixed; z-index: 151; right: 10px; top: 50%; display: flex; flex-direction: column; gap: 8px; transform: translate(16px,-50%); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .2s ease; }
 #smriti-right-controls.is-visible { opacity: 1; pointer-events: auto; transform: translate(0,-50%); }
 .smriti-right-action { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; color: #fff; background: rgba(15,23,42,.82); box-shadow: 0 8px 28px rgba(0,0,0,.25); backdrop-filter: blur(14px); cursor: pointer; }
+
+/* Keep the edge controls clickable while the pointer moves from the edge onto them. */
+#smriti-right-controls:hover { opacity: 1; pointer-events: auto; transform: translate(0,-50%); }
+#smriti-quick-trigger:hover { opacity: 1; pointer-events: auto; transform: translate(0,-50%); }
+#smriti-dock-trigger:hover { opacity: 1; pointer-events: auto; transform: translate(-50%,0); }
+#smriti-search-trigger:hover { opacity: 1; pointer-events: auto; transform: translate(-50%,0); }
+#smriti-settings-trigger:hover { opacity: 1; pointer-events: auto; transform: translate(0,-50%); }
