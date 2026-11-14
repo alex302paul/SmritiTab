@@ -140,6 +140,8 @@ describe("extension compatibility contracts", () => {
     assert.equal(new Set(urls).size, 1217, "Rapidfile wallpaper URLs must be unique");
     assert.ok(bundle.includes("smrititab:last-wallpaper-id"));
     assert.ok(bundle.includes("function rr(){return sr.find(r=>r.id===cy)??fy[0]"), "Keep the original Unsplash fallback");
+    assert.match(bundle, /const de=window\.requestAnimationFrame\(\(\)=>\{U\|\|g\(W\)\}\);T\.current\.push\(de\)/, "Keep the active wallpaper layer mounted");
+    assert.doesNotMatch(bundle, /setTimeout\(\(\)=>\{U\|\|m\(V=>V\.filter\(Z=>Z\.key===W\)\)\},900\)/, "Do not remove the active wallpaper after 900ms");
   });
 
   it("preserves the current persisted data namespace and keys", () => {
