@@ -11,6 +11,7 @@ const runtimeFiles = [
   "index.html",
   "background",
   "assets",
+  "docs",
 ];
 
 const verifyScript = path.join(projectRoot, "scripts", "verify-extension.mjs");
