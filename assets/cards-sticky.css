@@ -171,3 +171,13 @@ button.group.flex.items-center.gap-2:hover {
     transition: none !important;
   }
 }
+
+
+/* JS masonry packing fills vertical gaps without constraining native resize. */
+.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4.smriti-masonry {
+  display: block !important; position: relative !important; width: 100%; gap: 0 !important; min-height: 0;
+}
+.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4.smriti-masonry > article.smriti-masonry-card {
+  position: absolute !important; inset: auto !important; margin: 0 !important; flex: none !important;
+  resize: both; overflow: auto !important; max-width: 100%;
+}
