@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build Chrome extension and preview
+    name: Build wallpaper-first UI preview and verify OG compatibility
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
