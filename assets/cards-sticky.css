@@ -1,119 +1,126 @@
-/* ============================================================
-   SmritiTab — Dynamic height sticky cards + manual resize
-   - Few links  → short card
-   - Many links → taller (max ~8–10 items) then scroll
-   - User can drag bottom-right corner to resize
-   ============================================================ */
+/* SmritiTab card layout: content-sized cards, bounded lists and manual resize. */
 
-/* ---------- 1. Home grid – more flexible ---------- */
-.grid.min-h-\[260px\].flex-1.grid-cols-5 {
-  min-height: 0 !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  gap: 12px !important;
-  padding: 12px !important;
+/* Adult Links category grid (actual runtime classes: grid-cols-2 sm:grid-cols-4). */
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 {
+  align-items: start !important;
   align-content: start !important;
-  align-items: start !important; /* cards top-align, different heights look natural */
 }
 
-/* ---------- 2. Floating cards – content driven + resizable ---------- */
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
+  box-sizing: border-box;
+  height: auto !important; /* overrides the runtime h-40 fixed height */
+  min-height: 0 !important;
+  max-height: 360px !important;
+  min-width: 0;
+  max-width: 100%;
+  align-self: start;
+  resize: both;
+  overflow: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(249, 115, 22, 0.55) transparent;
+  border-radius: 10px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
 
-/* Main window-style cards */
-.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
-  border-radius: 14px !important;
-  min-height: 0 !important;                 /* allow very short cards */
-  max-height: 380px !important;             /* hard cap so they never become huge */
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article:hover {
+  border-color: rgba(249, 115, 22, 0.45) !important;
+  box-shadow: 0 5px 16px -7px rgba(249, 115, 22, 0.32), 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* The list grows naturally for short categories, then scrolls at 300px. */
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
+  box-sizing: border-box;
+  flex: 0 1 auto !important;
   height: auto !important;
-  resize: both !important;                  /* ← user can drag bottom-right corner */
-  overflow: auto !important;                /* required for resize to work */
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 0.08),
-    0 12px 28px -8px rgb(0 0 0 / 0.18),
-    0 0 0 1px rgb(255 255 255 / 0.06) !important;
+  min-height: 0 !important;
+  max-height: 300px !important;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(249, 115, 22, 0.55) transparent;
 }
 
-/* Optional: make resize handle more visible (subtle) */
-.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-resizer {
-  background: linear-gradient(135deg, transparent 50%, rgba(249, 115, 22, 0.45) 50%);
-  border-radius: 0 0 12px 0;
-}
-
-/* Hover polish */
-.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl:hover {
-  box-shadow:
-    0 8px 16px -4px rgb(0 0 0 / 0.12),
-    0 20px 40px -12px rgb(0 0 0 / 0.22),
-    0 0 0 1px rgba(249, 115, 22, 0.18) !important;
-  border-color: rgba(249, 115, 22, 0.25) !important;
-}
-
-/* ---------- 3. Lists inside cards – grow with content, then scroll ---------- */
-
-/* Key: only max-height, no forced min-height */
+/* Other scrollable lists: content-sized up to the same limit. */
 .scroll-thin.min-h-0.flex-1.overflow-y-auto,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-2,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-3,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-4,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.px-2.pb-2,
 .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
-  max-height: 300px !important;   /* ~8–10 links */
-  min-height: 0 !important;       /* shrink when few links */
-  height: auto !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain;
-  flex: 1 1 auto !important;
-}
-
-/* Grid style lists (favorites icons etc.) */
-.scroll-thin.grid.max-h-64 {
-  max-height: 300px !important;
+  box-sizing: border-box;
+  flex: 0 1 auto !important;
   min-height: 0 !important;
   height: auto !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
 }
 
+.scroll-thin.grid.max-h-64,
 .scroll-thin.grid.max-h-64.grid-cols-3,
 .scroll-thin.grid.max-h-64.grid-cols-3.gap-2 {
   max-height: 300px !important;
-  gap: 6px !important;
+  min-height: 0 !important;
 }
 
-/* ---------- 4. Scrollbar ---------- */
-.scroll-thin {
+/* Floating/window cards remain manually resizable, with bounded height. */
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
+  box-sizing: border-box;
+  min-height: 0 !important;
+  max-height: 380px !important;
+  height: auto !important;
+  resize: both;
+  overflow: auto !important;
   scrollbar-width: thin;
   scrollbar-color: rgba(249, 115, 22, 0.55) transparent;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 12px 28px -8px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(255 255 255 / 0.06) !important;
 }
 
-.scroll-thin::-webkit-scrollbar {
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl:hover {
+  border-color: rgba(249, 115, 22, 0.3) !important;
+  box-shadow: 0 8px 16px -4px rgb(0 0 0 / 0.12), 0 20px 40px -12px rgb(0 0 0 / 0.22), 0 0 0 1px rgba(249, 115, 22, 0.18) !important;
+}
+
+/* Consistent orange scrollbar in Chromium and Firefox. */
+.scroll-thin::-webkit-scrollbar,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar,
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
-.scroll-thin::-webkit-scrollbar-thumb {
+.scroll-thin::-webkit-scrollbar-thumb,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar-thumb,
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar-thumb {
   background: rgba(249, 115, 22, 0.55);
   border-radius: 999px;
 }
 
-.scroll-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(249, 115, 22, 0.8);
+.scroll-thin::-webkit-scrollbar-thumb:hover,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar-thumb:hover,
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar-thumb:hover {
+  background: rgba(249, 115, 22, 0.82);
 }
 
-/* ---------- 5. Visual polish ---------- */
-.glass-panel,
-.glass-panel-strong {
-  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+.scroll-thin::-webkit-resizer,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-resizer,
+.glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-resizer {
+  background: linear-gradient(135deg, transparent 50%, rgba(249, 115, 22, 0.5) 50%);
 }
 
+/* Preserve the orange hover accent on quick-link rows. */
 .group.flex.items-center.gap-2:hover,
 button.group.flex.items-center.gap-2:hover {
   background-color: rgba(249, 115, 22, 0.08) !important;
 }
 
-/* ---------- 6. Mobile ---------- */
 @media (max-width: 900px) {
-  .grid.min-h-\[260px\].flex-1.grid-cols-5 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
+    max-height: 320px !important;
   }
 
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto,
   .scroll-thin.min-h-0.flex-1.overflow-y-auto,
   .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
     max-height: 260px !important;
@@ -125,12 +132,12 @@ button.group.flex.items-center.gap-2:hover {
 }
 
 @media (max-width: 640px) {
-  .grid.min-h-\[260px\].flex-1.grid-cols-5 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    padding: 8px !important;
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
+    max-height: 290px !important;
+    resize: vertical; /* avoid horizontal overflow on narrow screens */
   }
 
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto,
   .scroll-thin.min-h-0.flex-1.overflow-y-auto,
   .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
     max-height: 230px !important;
@@ -138,14 +145,12 @@ button.group.flex.items-center.gap-2:hover {
 
   .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
     max-height: 300px !important;
-    /* resize on very small screens can be annoying, optional disable: */
-    /* resize: none !important; */
   }
 }
 
-/* ---------- 7. Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl:hover {
-    transform: none !important;
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article,
+  .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
+    transition: none !important;
   }
 }
