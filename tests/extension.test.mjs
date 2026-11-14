@@ -133,6 +133,14 @@ describe("extension compatibility contracts", () => {
     }
   });
 
+  it("includes the complete Rapidfile wallpaper catalog and keeps last-wallpaper tracking", () => {
+    const bundle = fs.readFileSync(path.join(projectRoot, "assets", "dashboard.bundle.js"), "utf8");
+    const urls = bundle.match(/https:\/\/cdn\\.rapidfile\\.cc\\/[A-Za-z0-9]+\/\\(\\d+\\)\\.jpg/g) || [];
+    assert.equal(urls.length, 1217, "Expected all 1,217 Rapidfile wallpapers to be embedded");
+    assert.equal(new Set(urls).size, 1217, "Rapidfile wallpaper URLs must be unique");
+    assert.ok(bundle.includes("smrititab:last-wallpaper-id"));
+  });
+
   it("preserves the current persisted data namespace and keys", () => {
     const bundle = fs.readFileSync(path.join(projectRoot, "assets", "dashboard.bundle.js"), "utf8");
     assert.ok(bundle.includes("smrititab:v1"));
