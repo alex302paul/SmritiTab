@@ -152,16 +152,18 @@ describe("extension compatibility contracts", () => {
     assert.ok(html.includes("./assets/cards-sticky.css"));
   });
 
-  it("lays out category cards as independently resizable sticky-note tiles", () => {
+  it("lays out category cards in responsive masonry columns with independent resizing", () => {
     const css = fs.readFileSync(path.join(projectRoot, "assets", "cards-sticky.css"), "utf8");
     for (const rule of [
-      "display: flex !important",
-      "flex-flow: row wrap !important",
-      "flex: 0 0 auto !important",
+      "display: block !important",
+      "column-width: 220px",
+      "column-count: auto !important",
+      "column-fill: balance",
+      "break-inside: avoid",
+      "display: inline-flex",
       "resize: both",
       "overflow: auto !important",
       "max-height: 300px !important",
-      "align-items: flex-start !important",
       "scrollbar-color: rgba(249, 115, 22",
     ]) {
       assert.ok(css.includes(rule), `Missing card layout rule: ${rule}`);
