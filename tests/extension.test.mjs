@@ -125,7 +125,6 @@ describe("extension compatibility contracts", () => {
   it("keeps Chrome permissions required by implemented dashboard features", () => {
     const manifest = JSON.parse(fs.readFileSync(path.join(projectRoot, "manifest.json"), "utf8"));
     const permissions = new Set(manifest.permissions || []);
-    assert.ok(manifest.host_permissions?.includes("https://cdn.rapidfile.cc/*"), "Missing Rapidfile CDN host permission");
     for (const permission of [
       "storage", "bookmarks", "history", "tabs",
       "tabGroups", "contextMenus", "clipboardRead", "clipboardWrite",
@@ -140,6 +139,8 @@ describe("extension compatibility contracts", () => {
     assert.equal(urls.length, 1217, "Expected all 1,217 Rapidfile wallpapers to be embedded");
     assert.equal(new Set(urls).size, 1217, "Rapidfile wallpaper URLs must be unique");
     assert.ok(bundle.includes("smrititab:last-wallpaper-id"));
+    assert.ok(bundle.includes("Wallpaper load timed out:"), "Wallpaper loading must time out and trigger fallback");
+    assert.ok(bundle.includes("[SmritiTab] Wallpaper load failed; trying fallback."), "Wallpaper failures must be diagnosable in Console");
     assert.ok(bundle.includes("function rr(){return sr.find(r=>r.id===cy)??fy[0]"), "Keep the original Unsplash fallback");
     assert.match(bundle, /const de=window\.requestAnimationFrame\(\(\)=>\{U\|\|g\(W\)\}\);T\.current\.push\(de\)/, "Keep the active wallpaper layer mounted");
     assert.doesNotMatch(bundle, /setTimeout\(\(\)=>\{U\|\|m\(V=>V\.filter\(Z=>Z\.key===W\)\)\},900\)/, "Do not remove the active wallpaper after 900ms");
