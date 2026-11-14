@@ -96,3 +96,7 @@ body.smriti-overlay-open #smriti-settings-trigger { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .smriti-edge-trigger, .smriti-wallpaper-shell form[role="search"], .smriti-wallpaper-shell nav[aria-label="Dock"], .smriti-launcher-app { transition: none !important; }
 }
+
+#smriti-right-controls { position: fixed; z-index: 151; right: 10px; top: 50%; display: flex; flex-direction: column; gap: 8px; transform: translate(16px,-50%); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .2s ease; }
+#smriti-right-controls.is-visible { opacity: 1; pointer-events: auto; transform: translate(0,-50%); }
+.smriti-right-action { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; color: #fff; background: rgba(15,23,42,.82); box-shadow: 0 8px 28px rgba(0,0,0,.25); backdrop-filter: blur(14px); cursor: pointer; }
