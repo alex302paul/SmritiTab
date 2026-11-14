@@ -1,12 +1,12 @@
 /* SmritiTab card layout: content-sized cards, bounded lists and manual resize. */
 
 /* Adult Links category grid (actual runtime classes: grid-cols-2 sm:grid-cols-4). */
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 {
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 {
   align-items: start !important;
   align-content: start !important;
 }
 
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article {
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
   box-sizing: border-box;
   height: auto !important; /* overrides the runtime h-40 fixed height */
   min-height: 0 !important;
@@ -22,13 +22,13 @@
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article:hover {
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article:hover {
   border-color: rgba(249, 115, 22, 0.45) !important;
   box-shadow: 0 5px 16px -7px rgba(249, 115, 22, 0.32), 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
 /* The list grows naturally for short categories, then scrolls at 300px. */
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\\.5.overflow-y-auto {
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
   box-sizing: border-box;
   flex: 0 1 auto !important;
   height: auto !important;
@@ -47,7 +47,7 @@
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-3,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.p-4,
 .scroll-thin.min-h-0.flex-1.overflow-y-auto.px-2.pb-2,
-.min-h-0.flex-1.grid.grid-cols-1.gap-0\\.5.overflow-y-auto {
+.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
   box-sizing: border-box;
   flex: 0 1 auto !important;
   min-height: 0 !important;
@@ -84,27 +84,27 @@
 
 /* Consistent orange scrollbar in Chromium and Firefox. */
 .scroll-thin::-webkit-scrollbar,
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article::-webkit-scrollbar,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar,
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
 .scroll-thin::-webkit-scrollbar-thumb,
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article::-webkit-scrollbar-thumb,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar-thumb,
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar-thumb {
   background: rgba(249, 115, 22, 0.55);
   border-radius: 999px;
 }
 
 .scroll-thin::-webkit-scrollbar-thumb:hover,
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article::-webkit-scrollbar-thumb:hover,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-scrollbar-thumb:hover,
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-scrollbar-thumb:hover {
   background: rgba(249, 115, 22, 0.82);
 }
 
 .scroll-thin::-webkit-resizer,
-.grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article::-webkit-resizer,
+.grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article::-webkit-resizer,
 .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl::-webkit-resizer {
   background: linear-gradient(135deg, transparent 50%, rgba(249, 115, 22, 0.5) 50%);
 }
@@ -116,13 +116,13 @@ button.group.flex.items-center.gap-2:hover {
 }
 
 @media (max-width: 900px) {
-  .grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article {
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
     max-height: 320px !important;
   }
 
-  .grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\\.5.overflow-y-auto,
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto,
   .scroll-thin.min-h-0.flex-1.overflow-y-auto,
-  .min-h-0.flex-1.grid.grid-cols-1.gap-0\\.5.overflow-y-auto {
+  .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
     max-height: 260px !important;
   }
 
@@ -132,14 +132,14 @@ button.group.flex.items-center.gap-2:hover {
 }
 
 @media (max-width: 640px) {
-  .grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article {
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article {
     max-height: 290px !important;
     resize: vertical; /* avoid horizontal overflow on narrow screens */
   }
 
-  .grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\\.5.overflow-y-auto,
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article > ul.min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto,
   .scroll-thin.min-h-0.flex-1.overflow-y-auto,
-  .min-h-0.flex-1.grid.grid-cols-1.gap-0\\.5.overflow-y-auto {
+  .min-h-0.flex-1.grid.grid-cols-1.gap-0\.5.overflow-y-auto {
     max-height: 230px !important;
   }
 
@@ -149,7 +149,7 @@ button.group.flex.items-center.gap-2:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .grid.w-full.grid-cols-2.gap-1\\.5.sm\\:grid-cols-4 > article,
+  .grid.w-full.grid-cols-2.gap-1\.5.sm\:grid-cols-4 > article,
   .glass-panel-strong.pointer-events-auto.absolute.flex.flex-col.overflow-hidden.rounded-2xl {
     transition: none !important;
   }
